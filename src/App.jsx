@@ -30,7 +30,7 @@ import HostingerLogo from "@/assets/logos/tech_stack/hostinger.svg";
 import PorkbunLogo from "@/assets/logos/tech_stack/porkbun.svg";
 import TailwindcssLogo from "@/assets/logos/tech_stack/tailwindcss.svg";
 
-import BackendProfile from "@/assets/profiles/daven.jpg";
+import DeveloperProfile from "@/assets/profiles/profile.jpeg";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -217,23 +217,23 @@ export default function App() {
           >
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-                We Build <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-400">Together</span>
+                I Build with <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-400">Purpose</span>
               </h1>
 
               <p className={`text-base md:text-lg mb-8 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
-                A Developer Duo Crafting Digital Excellence — full stack solutions with clean code, scalable architecture, and elegant interfaces.
+                A Full-Stack Developer crafting digital experiences with clean code, scalable architecture, and elegant user interfaces.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                 <div className={`${darkMode ? 'bg-gray-900/60 border border-gray-800' : 'bg-slate-50/70 border border-slate-200'} rounded-xl p-4 md:p-6 transition-shadow duration-200`}>
                   <div className="flex flex-col items-center md:items-start gap-4 md:flex-row">
                     <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
-                      <img src={BackendProfile} alt="Backend Developer" className="w-full h-full object-cover scale-100" />
+                      <img src={DeveloperProfile} alt="Backend Developer" className="w-full h-full object-cover scale-100" />
                     </div>
                     <div className="text-center md:text-left">
-                      <h3 className="text-lg md:text-xl font-semibold">Backend Developer</h3>
+                      <h3 className="text-lg md:text-xl font-semibold">Fullstack Developer</h3>
                       <p className="text-sm md:text-base opacity-90 mt-1">
-                        Architecting robust server-side solutions with Laravel, Python, and PHP. Specializing in database design, API development, and scalable system architecture.
+                        Architecting robust server-side solutions with Laravel, Python, and PHP while crafting modern, intuitive front-end interfaces using Vue.js and React. Specializing in database design and scalable full-stack system architecture.
                       </p>
                     </div>
                   </div>
@@ -241,7 +241,7 @@ export default function App() {
               </div>
 
               <p className="mt-8 text-sm md:text-base opacity-90 text-center">
-                We're a collaborative development team that combines backend expertise with frontend finesse. From concept to deployment — full-stack excellence.
+                From concept to deployment — I deliver reliable, end-to-end solutions.
               </p>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function App() {
 
       <section className="px-6 py-12 md:py-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-6">Our Tech Stack</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-6">My Tech Stack</h2>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {techStack.map((tech, i) => (
@@ -279,7 +279,7 @@ export default function App() {
                 className={`rounded-xl overflow-hidden shadow-sm hover:shadow-md transform transition-all duration-200 cursor-pointer
                 ${darkMode ? 'bg-gray-900/60 border border-gray-800' : 'bg-white border border-slate-200'}`}
               >
-                <div className="relative w-full bg-gray-100 dark:bg-gray-800 h-48 flex items-center justify-center">
+                <div className="relative w-full bg-gray-800 h-48 flex items-center justify-center">
                   {project.image ? (
                     <img src={project.image} alt={project.name} className="max-h-full max-w-full object-contain p-4" />
                   ) : (
