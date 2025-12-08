@@ -192,8 +192,8 @@ export default function App() {
   };
 
   // small helper for accent gradient (modern gradient)
-  const accentFrom = 'from-purple-500';
-  const accentTo = 'to-cyan-400';
+  const accentFrom = 'purple-500';
+  const accentTo = 'cyan-400';
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-gray-950 text-gray-100' : 'bg-white text-gray-900'}`}>
@@ -217,7 +217,7 @@ export default function App() {
           >
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-                I Build with <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-400">Purpose</span>
+                I Build with <span className={`bg-clip-text text-transparent bg-gradient-to-r from-${accentFrom} to-${accentTo}`}>Purpose</span>
               </h1>
 
               <p className={`text-base md:text-lg mb-8 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
@@ -256,7 +256,7 @@ export default function App() {
             {techStack.map((tech, i) => (
               <div
                 key={i}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-transform duration-150 hover:-translate-y-1
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-transform duration-150 hover:scale-105
                 ${darkMode ? 'bg-white/3 border border-white/6' : 'bg-white border border-slate-200 shadow-sm'}`}
               >
                 <img src={tech.icon} alt={tech.name} className="w-6 h-6" />
@@ -269,15 +269,15 @@ export default function App() {
 
       <section className="px-6 py-8 md:py-24">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8">Our Projects</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8">My Projects</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
               <article
                 key={index}
                 onClick={() => openModal(project, index)}
-                className={`rounded-xl overflow-hidden shadow-sm hover:shadow-md transform transition-all duration-200 cursor-pointer
-                ${darkMode ? 'bg-gray-900/60 border border-gray-800' : 'bg-white border border-slate-200'}`}
+                className={`rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:scale-101 transform transition-all duration-200 cursor-pointer
+                ${darkMode ? `bg-gray-900/60 border border-gray-800` : 'bg-white border border-slate-200'}`}
               >
                 <div className="relative w-full bg-gray-800 h-48 flex items-center justify-center">
                   {project.image ? (
@@ -381,7 +381,7 @@ export default function App() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex items-center justify-between px-4 py-3 rounded-lg hover:-translate-y-1 transition-transform
+                      className={`flex items-center justify-between px-4 py-3 rounded-lg hover:scale-105 transition-transform
                   ${darkMode ? 'bg-white/5 border border-white/6' : 'bg-white border border-slate-200'}`}
                     >
                       <span className={`font-medium ${darkMode ? 'text-green-300' : 'text-blue-600'}`}>{link.type}</span>
