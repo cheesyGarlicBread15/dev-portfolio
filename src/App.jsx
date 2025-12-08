@@ -217,7 +217,7 @@ export default function App() {
           >
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-                I Build with <span className={`bg-clip-text text-transparent bg-gradient-to-r from-${accentFrom} to-${accentTo}`}>Purpose</span>
+                I Build with <span className={`bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-400`}>Purpose</span>
               </h1>
 
               <p className={`text-base md:text-lg mb-8 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
