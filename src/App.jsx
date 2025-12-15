@@ -250,7 +250,7 @@ export default function App() {
 
       <section className="px-6 py-12 md:py-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-6">My Tech Stack</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-6">Tech Stack</h2>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {techStack.map((tech, i) => (
@@ -269,7 +269,7 @@ export default function App() {
 
       <section className="px-6 py-8 md:py-24">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8">My Projects</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8">Projects</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
