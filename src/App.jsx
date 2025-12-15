@@ -233,7 +233,7 @@ export default function App() {
                     <div className="text-center md:text-left">
                       <h3 className="text-lg md:text-xl font-semibold">Fullstack Developer</h3>
                       <p className="text-sm md:text-base opacity-90 mt-1">
-                        Architecting robust server-side solutions with Laravel, Python, and PHP while crafting modern, intuitive front-end interfaces using Vue.js and React. Specializing in database design and scalable full-stack system architecture.
+                        Architecting robust server-side solutions with Laravel and PHP while crafting modern, intuitive front-end interfaces using Vue and React. Specializing in database design and scalable full-stack system architecture.
                       </p>
                     </div>
                   </div>
