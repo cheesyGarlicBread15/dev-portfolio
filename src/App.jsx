@@ -29,6 +29,8 @@ import VscodeLogo from "@/assets/logos/tech_stack/vscode.svg";
 import HostingerLogo from "@/assets/logos/tech_stack/hostinger.svg";
 import PorkbunLogo from "@/assets/logos/tech_stack/porkbun.svg";
 import TailwindcssLogo from "@/assets/logos/tech_stack/tailwindcss.svg";
+import VercelDarkLogo from "@/assets/logos/tech_stack/vercel-dark.svg";
+import VercelWhiteLogo from "@/assets/logos/tech_stack/vercel-white.svg"
 
 import DeveloperProfile from "@/assets/profiles/profile.jpeg";
 
@@ -101,6 +103,7 @@ export default function App() {
     { name: "VS Code", icon: VscodeLogo },
     { name: "Hostinger", icon: HostingerLogo },
     { name: "Porkbun", icon: PorkbunLogo },
+    { name: "Vercel", icon: darkMode ? VercelWhiteLogo : VercelDarkLogo },
   ];
 
   const projects = [
