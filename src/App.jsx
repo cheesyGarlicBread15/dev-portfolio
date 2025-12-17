@@ -226,7 +226,7 @@ export default function App() {
 
               {/* Subheading */}
               <p className={`text-lg md:text-xl mb-10 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
-                Crafting digital experiences with clean code, scalable architecture, and elegant user interfaces.
+                Crafting digital experiences with clean code and scalable architecture.
               </p>
 
               {/* Profile Card */}
@@ -244,14 +244,14 @@ export default function App() {
                 <div className="text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-semibold">Fullstack Developer</h3>
                   <p className={`text-base md:text-lg mt-2 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
-                    Architecting robust server-side solutions with Laravel and PHP while building modern, intuitive front-end interfaces using Vue and React. Specializing in database design and scalable full-stack system architecture.
+                    Architecting robust server-side solutions with Laravel and PHP while building modern, intuitive front-end interfaces using Vue.js and React.js. Specializing in database design and scalable full-stack system architecture.
                   </p>
                 </div>
               </div>
 
               {/* Footer text */}
               <p className="mt-10 text-base md:text-lg opacity-90 text-center">
-                From concept to deployment — I deliver reliable, end-to-end solutions.
+                From concept to deployment. I deliver reliable, end-to-end solutions.
               </p>
             </div>
           </div>
