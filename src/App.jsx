@@ -207,40 +207,50 @@ export default function App() {
         {darkMode ? <Sun className="w-5 h-5 text-yellow-300" /> : <Moon className="w-5 h-5 text-blue-600" />}
       </button>
 
-      <section className="flex items-center justify-center px-6 py-8 md:py-24">
-        <div className="w-full max-w-6xl">
+      <section className="flex items-center justify-center px-6 py-12 md:py-24 bg-transparent">
+        <div className="w-full max-w-5xl">
           <div
-            className={`relative overflow-hidden rounded-xl md:rounded-2xl p-6 md:p-12 shadow-md transition-all duration-300
-            ${darkMode
-                ? 'bg-opacity-40 bg-gradient-to-br from-black/40 to-gray-900/40'
-                : 'bg-gradient-to-br from-slate-50 to-slate-200 bg-opacity-60'}`}
+            className={`relative overflow-hidden rounded-2xl p-8 md:p-12 shadow-lg transition-all duration-300
+      ${darkMode
+                ? 'bg-gradient-to-br from-black/60 to-gray-900/60'
+                : 'bg-gradient-to-br from-slate-50/70 to-slate-200/70'}`}
           >
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
-                I Build with <span className={`bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-400`}>Purpose</span>
+              {/* Main Heading */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                I Build with{' '}
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-400">
+                  Purpose
+                </span>
               </h1>
 
-              <p className={`text-base md:text-lg mb-8 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
-                A Full-Stack Developer crafting digital experiences with clean code, scalable architecture, and elegant user interfaces.
+              {/* Subheading */}
+              <p className={`text-lg md:text-xl mb-10 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+                Crafting digital experiences with clean code, scalable architecture, and elegant user interfaces.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-                <div className={`${darkMode ? 'bg-gray-900/60 border border-gray-800' : 'bg-slate-50/70 border border-slate-200'} rounded-xl p-4 md:p-6 transition-shadow duration-200`}>
-                  <div className="flex flex-col items-center md:items-start gap-4 md:flex-row">
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
-                      <img src={DeveloperProfile} alt="Backend Developer" className="w-full h-full object-cover scale-100" />
-                    </div>
-                    <div className="text-center md:text-left">
-                      <h3 className="text-lg md:text-xl font-semibold">Fullstack Developer</h3>
-                      <p className="text-sm md:text-base opacity-90 mt-1">
-                        Architecting robust server-side solutions with Laravel, Python, and PHP while crafting modern, intuitive front-end interfaces using Vue.js and React. Specializing in database design and scalable full-stack system architecture.
-                      </p>
-                    </div>
-                  </div>
+              {/* Profile Card */}
+              <div
+                className={`rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8 transition-shadow duration-200
+          ${darkMode ? 'bg-gray-900/60 border border-gray-800' : 'bg-white/80 border border-slate-200'}`}
+              >
+                <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0">
+                  <img
+                    src={DeveloperProfile}
+                    alt="Fullstack Developer"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="text-center md:text-left">
+                  <h3 className="text-xl md:text-2xl font-semibold">Fullstack Developer</h3>
+                  <p className={`text-base md:text-lg mt-2 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
+                    Architecting robust server-side solutions with Laravel and PHP while building modern, intuitive front-end interfaces using Vue and React. Specializing in database design and scalable full-stack system architecture.
+                  </p>
                 </div>
               </div>
 
-              <p className="mt-8 text-sm md:text-base opacity-90 text-center">
+              {/* Footer text */}
+              <p className="mt-10 text-base md:text-lg opacity-90 text-center">
                 From concept to deployment — I deliver reliable, end-to-end solutions.
               </p>
             </div>
