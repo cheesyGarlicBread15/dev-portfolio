@@ -34,6 +34,7 @@ import ShadcnDarkLogo from "@/assets/logos/tech_stack/shadcn-dark.svg"
 import ShadcnWhiteLogo from "@/assets/logos/tech_stack/shadcn-white.svg"
 
 import DeveloperProfile from "@/assets/profiles/profile.jpeg";
+import { img } from 'framer-motion/client';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -146,7 +147,7 @@ export default function App() {
     {
       name: "CMUPin",
       description: "A community-powered platform for reporting and mapping hazardous events like floods, landslides, fires, and other emergencies. Users can pin incidents on an interactive map with geographical layers, share updates, and verify reports. By turning community input into actionable insights, the platform helps citizens, responders, and local authorities coordinate faster, stay aware of risks, and work together to keep everyone safe.",
-      image: getMainImage("project1"),
+      image: screenshotsByProject["project1"]?.find(img => img.includes("project1-1.png")) ?? "",
       tech: ["Laravel", "React.js", "PostgreSQL"],
       screenshots: screenshotsByProject["project1"] || [],
       links: [
@@ -349,9 +350,13 @@ export default function App() {
                 ${darkMode ? `bg-gray-900/60 border border-gray-800` : 'bg-white border border-slate-200'}`}
               >
                 <div className="relative w-full bg-gray-800 h-48 flex items-center justify-center">
-                  {(
-                    <img src={project.image} alt={project.name} className="max-h-full max-w-full object-contain p-4" />
-                  )}
+                  {
+                    project.image ? (
+                      <img src={project.image} alt={project.name} className="max-h-full max-w-full object-contain p-4" />
+                    ) : (
+                      <div className="text-sm text-gray-500">No preview available</div>
+                    )
+                  }
                 </div>
 
                 <div className="p-4 md:p-5">
