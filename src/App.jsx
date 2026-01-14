@@ -80,6 +80,7 @@ export default function App() {
     );
   };
 
+  // TODO: add aws (with certs? maybe separate them), shadcn, 
   const techStack = [
     { name: "Laravel", icon: LaravelLogo },
     { name: "React.js", icon: ReactLogo },
@@ -104,6 +105,7 @@ export default function App() {
     { name: "Vercel", icon: darkMode ? VercelWhiteLogo : VercelDarkLogo },
   ];
 
+  // TODO: add newwing and lifeline, update csco after deployment
   const projects = [
     {
       name: "CMUPin",
@@ -138,7 +140,7 @@ export default function App() {
     },
     {
       name: "CSCo",
-      description: "CSCo is the official landing page for the student council of the College of Information Sciences and Computing at Central Mindanao University. Designed to showcase updates, events, and initiatives from the council, the site serves as a hub for students to stay connected and informed. Currently under construction, CSCo will soon provide a modern, user-friendly space for the college community to engage with their student leaders and access important information.",
+      description: "CSCo is the student council organization of the College of Information Sciences and Computing at Central Mindanao University. \"csco.space\" is the first ever website in the history of the organization designed to showcase updates, events, and initiatives from the council, the site serves as a hub for students to stay connected and informed. The website provides a modern, user-friendly space for the college community to engage with their student leaders and access important information.",
       image: screenshotsByProject["project4"]?.find(img => img.includes('project4-1.png')) || (screenshotsByProject["project4"]?.[0] ?? ''),
       tech: ["React.js", "Hostinger"],
       screenshots: screenshotsByProject["project4"] || [],
