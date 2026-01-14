@@ -52,12 +52,25 @@ export default function App() {
   );
 
   const screenshotsByProject: Record<string, string[]> = {};
+
+  // put screenshots
   Object.entries(allScreenshots).forEach(([path, url]) => {
     const match = path.match(/screenshots\/([^/]+)\//);
     if (match) {
       const projectName = match[1];
       if (!screenshotsByProject[projectName]) screenshotsByProject[projectName] = [];
       screenshotsByProject[projectName].push(url);
+    }
+  });
+
+  // put main image in front
+  Object.keys(screenshotsByProject).forEach((projectName) => {
+    const mainImgIndex = screenshotsByProject[projectName].findIndex(img =>
+      img.includes(`${projectName}-1.png`)
+    );
+    if (mainImgIndex > -1) {
+      const [mainImg] = screenshotsByProject[projectName].splice(mainImgIndex, 1);
+      screenshotsByProject[projectName].unshift(mainImg);
     }
   });
 
@@ -114,9 +127,8 @@ export default function App() {
 
   const getMainImage = (projectKey: string) =>
     screenshotsByProject[projectKey]?.find(img =>
-      img.endsWith(`${projectKey}-1.png`)
+      img.includes(`${projectKey}-1.png`)
     ) ?? "";
-
 
   type Project = {
     name: string;
@@ -194,10 +206,15 @@ export default function App() {
     },
   ];
 
+  console.log(projects)
+
   // modal & carousel helpers
   const openModal = (project: Project, index: number) => {
     setSelectedProject({ ...project, index });
-    setCurrentImageIndex(0);
+    const mainImg = getMainImage(`project${index + 1}`);
+    const mainIndex = project.screenshots.findIndex(s => s === mainImg);
+    console.log(mainIndex)
+    setCurrentImageIndex(mainIndex !== -1 ? mainIndex : 0);
     document.body.style.overflow = 'hidden';
     setTimeout(() => setModalVisible(true), 10);
   };
