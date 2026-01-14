@@ -67,7 +67,7 @@ export default function App() {
   // put main image in front
   Object.keys(screenshotsByProject).forEach((projectName) => {
     const mainImgIndex = screenshotsByProject[projectName].findIndex(img =>
-      img.includes(`${projectName}-1.png`)
+      img.includes(`${projectName}-1`)
     );
     if (mainImgIndex > -1) {
       const [mainImg] = screenshotsByProject[projectName].splice(mainImgIndex, 1);
@@ -126,10 +126,10 @@ export default function App() {
     { name: "Shadcn/ui", icon: darkMode ? ShadcnWhiteLogo : ShadcnDarkLogo },
   ];
 
-  const getMainImage = (projectKey: string) =>
-    screenshotsByProject[projectKey]?.find(img =>
-      img.includes(`${projectKey}-1.png`)
-    ) ?? "";
+  const getMainImage = (projectKey: string) => {
+    const images = screenshotsByProject[projectKey] || [];
+    return images.find(img => img.includes(`${projectKey}-1`)) ?? images[0] ?? "";
+  };
 
   type Project = {
     name: string;
@@ -147,7 +147,7 @@ export default function App() {
     {
       name: "CMUPin",
       description: "A community-powered platform for reporting and mapping hazardous events like floods, landslides, fires, and other emergencies. Users can pin incidents on an interactive map with geographical layers, share updates, and verify reports. By turning community input into actionable insights, the platform helps citizens, responders, and local authorities coordinate faster, stay aware of risks, and work together to keep everyone safe.",
-      image: screenshotsByProject["project1"]?.find(img => img.includes("project1-1.png")) ?? "",
+      image: getMainImage("project1"),
       tech: ["Laravel", "React.js", "PostgreSQL"],
       screenshots: screenshotsByProject["project1"] || [],
       links: [
