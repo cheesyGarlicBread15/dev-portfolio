@@ -349,10 +349,8 @@ export default function App() {
                 ${darkMode ? `bg-gray-900/60 border border-gray-800` : 'bg-white border border-slate-200'}`}
               >
                 <div className="relative w-full bg-gray-800 h-48 flex items-center justify-center">
-                  {project.image ? (
+                  {(
                     <img src={project.image} alt={project.name} className="max-h-full max-w-full object-contain p-4" />
-                  ) : (
-                    <div className="text-sm text-gray-500">No preview available</div>
                   )}
                 </div>
 
