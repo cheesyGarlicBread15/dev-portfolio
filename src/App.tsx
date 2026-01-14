@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Moon,
   Sun,
@@ -37,7 +37,8 @@ import DeveloperProfile from "@/assets/profiles/profile.jpeg";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  type ProjectWithIndex = Project & { index: number };
+  const [selectedProject, setSelectedProject] = useState<ProjectWithIndex | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -45,12 +46,12 @@ export default function App() {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  const allScreenshots = import.meta.glob(
+  const allScreenshots: Record<string, string> = import.meta.glob(
     "@/assets/screenshots/*/*.{png,jpg,jpeg,webp}",
     { eager: true, import: "default" }
   );
 
-  const screenshotsByProject = {};
+  const screenshotsByProject: Record<string, string[]> = {};
   Object.entries(allScreenshots).forEach(([path, url]) => {
     const match = path.match(/screenshots\/([^/]+)\//);
     if (match) {
@@ -60,11 +61,14 @@ export default function App() {
     }
   });
 
-  const TechBadge = ({ techName }) => {
-    const techItem = techStack.find((t) => t.name === techName);
+  type TechBadgeProps = {
+    name: string
+  }
+  const TechBadge = ({ name }: TechBadgeProps) => {
+    const techItem = techStack.find((t) => t.name === name);
     if (!techItem) return (
       <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white/60 dark:bg-white/5 border border-transparent text-sm">
-        <span>{techName}</span>
+        <span>{name}</span>
       </div>
     );
 
@@ -76,8 +80,8 @@ export default function App() {
             : 'bg-white/70 border border-white/30'
           }`}
       >
-        <img src={techItem.icon} alt={techName} className="w-5 h-5" />
-        <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>{techName}</span>
+        <img src={techItem.icon} alt={name} className="w-5 h-5" />
+        <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>{name}</span>
       </div>
     );
   };
@@ -108,13 +112,25 @@ export default function App() {
     { name: "Shadcn/ui", icon: darkMode ? ShadcnWhiteLogo : ShadcnDarkLogo },
   ];
 
-  const getMainImage = (projectKey) =>
+  const getMainImage = (projectKey: string) =>
     screenshotsByProject[projectKey]?.find(img =>
       img.endsWith(`${projectKey}-1.png`)
     ) ?? "";
 
 
-  const projects = [
+  type Project = {
+    name: string;
+    description: string;
+    image: string;
+    tech: string[];
+    screenshots: string[];
+    links: {
+      type: string;
+      url: string;
+    }[];
+  }
+
+  const projects: Project[] = [
     {
       name: "CMUPin",
       description: "A community-powered platform for reporting and mapping hazardous events like floods, landslides, fires, and other emergencies. Users can pin incidents on an interactive map with geographical layers, share updates, and verify reports. By turning community input into actionable insights, the platform helps citizens, responders, and local authorities coordinate faster, stay aware of risks, and work together to keep everyone safe.",
@@ -179,7 +195,7 @@ export default function App() {
   ];
 
   // modal & carousel helpers
-  const openModal = (project, index) => {
+  const openModal = (project: Project, index: number) => {
     setSelectedProject({ ...project, index });
     setCurrentImageIndex(0);
     document.body.style.overflow = 'hidden';
@@ -220,10 +236,6 @@ export default function App() {
     if ((selectedProject.screenshots || []).length === 0) return;
     setCurrentImageIndex((prev) => (prev - 1 + selectedProject.screenshots.length) % selectedProject.screenshots.length);
   };
-
-  // small helper for accent gradient (modern gradient)
-  const accentFrom = 'purple-500';
-  const accentTo = 'cyan-400';
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-gray-950 text-gray-100' : 'bg-white text-gray-900'}`}>
@@ -332,8 +344,8 @@ export default function App() {
                   <p className={`text-sm md:text-base mb-3 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>{project.description}</p>
 
                   <div className="flex flex-wrap gap-2">
-                    {project.tech.map((t, i) => (
-                      <TechBadge key={i} techName={t} />
+                    {project.tech.map((t) => (
+                      <TechBadge name={t} />
                     ))}
                   </div>
                 </div>
@@ -359,7 +371,7 @@ export default function App() {
             onClick={(e) => e.stopPropagation()}
           >
 
-            <div class="flex justify-end">
+            <div className="flex justify-end">
               <button
                 onClick={closeModal}
                 className={`mb-2 p-2 rounded-full transition-colors duration-150 focus:outline-none cursor-pointer
