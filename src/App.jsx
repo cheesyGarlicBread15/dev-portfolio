@@ -108,11 +108,17 @@ export default function App() {
     { name: "Shadcn/ui", icon: darkMode ? ShadcnWhiteLogo : ShadcnDarkLogo },
   ];
 
+  const getMainImage = (projectKey) =>
+    screenshotsByProject[projectKey]?.find(img =>
+      img.endsWith(`${projectKey}-1.png`)
+    ) ?? "";
+
+
   const projects = [
     {
       name: "CMUPin",
       description: "A community-powered platform for reporting and mapping hazardous events like floods, landslides, fires, and other emergencies. Users can pin incidents on an interactive map with geographical layers, share updates, and verify reports. By turning community input into actionable insights, the platform helps citizens, responders, and local authorities coordinate faster, stay aware of risks, and work together to keep everyone safe.",
-      image: screenshotsByProject["project1"]?.find(img => img.includes('project1-1.png')) || (screenshotsByProject["project1"]?.[0] ?? ''),
+      image: getMainImage("project1"),
       tech: ["Laravel", "React.js", "PostgreSQL"],
       screenshots: screenshotsByProject["project1"] || [],
       links: [
@@ -122,7 +128,7 @@ export default function App() {
     {
       name: "Cosmic Explorer",
       description: "Cosmic Explorer is a multi-platform app that lets users dive into NASA’s incredible media library. From stunning images and videos to fascinating audio clips, it brings space missions, scientific discoveries, and astronomical phenomena right to your fingertips—whether on mobile, web, or desktop.",
-      image: screenshotsByProject["project2"]?.find(img => img.includes('project2-1.png')) || (screenshotsByProject["project2"]?.[0] ?? ''),
+      image: getMainImage("project2"),
       tech: ["Flutter", "Dart", "Firebase", "Supabase"],
       screenshots: screenshotsByProject["project2"] || [],
       links: [
@@ -133,7 +139,7 @@ export default function App() {
     {
       name: "SafeAssist",
       description: "SafeAssist is a safety app made for delivery drivers. It gives quick access to police, hospitals, and auto repair services, while also letting drivers send emergency alerts to authorities and their company. Designed for peace of mind on the road, SafeAssist helps drivers stay safe, respond quickly to incidents, and navigate their routes with confidence.",
-      image: screenshotsByProject["project3"]?.find(img => img.includes('project3-1.png')) || (screenshotsByProject["project3"]?.[0] ?? ''),
+      image: getMainImage("project3"),
       tech: ["Figma", "Canva"],
       screenshots: screenshotsByProject["project3"] || [],
       links: [
@@ -143,7 +149,7 @@ export default function App() {
     {
       name: "CSCo",
       description: "CSCo is the student council organization of the College of Information Sciences and Computing at Central Mindanao University. \"csco.space\" is the first ever website in the history of the organization designed to showcase updates, events, and initiatives from the council, the site serves as a hub for students to stay connected and informed. The website provides a modern, user-friendly space for the college community to engage with their student leaders and access important information.",
-      image: screenshotsByProject["project4"]?.find(img => img.includes('project4-1.png')) || (screenshotsByProject["project4"]?.[0] ?? ''),
+      image: getMainImage("project4"),
       tech: ["React.js", "Hostinger", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project4"] || [],
       links: [
@@ -153,7 +159,7 @@ export default function App() {
     {
       name: "LifeLine Connect",
       description: "LifeLine Connect is a web-based solution dedicated to improving blood donation efforts and saving lives. By providing up-to-date blood drive schedules, hospital blood inventory tracking, and educational materials, it bridges the gap between donors and healthcare institutions to ensure timely and efficient blood availability.",
-      image: screenshotsByProject["project5"]?.find(img => img.includes('project5-1.png')) || (screenshotsByProject["project5"]?.[0] ?? ''),
+      image: getMainImage("project5"),
       tech: ["Laravel", "Vue.js", "Hostinger", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project5"] || [],
       links: [
@@ -163,7 +169,7 @@ export default function App() {
     {
       name: "New Wing Renewables",
       description: "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company’s end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
-      image: screenshotsByProject["project6"]?.find(img => img.includes('project6-1.png')) || (screenshotsByProject["project6"]?.[0] ?? ''),
+      image: getMainImage("project6"),
       tech: ["Laravel", "React.js", "Hostinger", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project6"] || [],
       links: [
