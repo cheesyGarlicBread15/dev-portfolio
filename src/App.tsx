@@ -34,7 +34,6 @@ import ShadcnDarkLogo from "@/assets/logos/tech_stack/shadcn-dark.svg"
 import ShadcnWhiteLogo from "@/assets/logos/tech_stack/shadcn-white.svg"
 
 import DeveloperProfile from "@/assets/profiles/profile.jpeg";
-import { img } from 'framer-motion/client';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
