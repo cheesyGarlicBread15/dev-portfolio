@@ -30,6 +30,8 @@ import HostingerLogo from "@/assets/logos/tech_stack/hostinger.svg";
 import TailwindcssLogo from "@/assets/logos/tech_stack/tailwindcss.svg";
 import VercelDarkLogo from "@/assets/logos/tech_stack/vercel-dark.svg";
 import VercelWhiteLogo from "@/assets/logos/tech_stack/vercel-white.svg"
+import ShadcnDarkLogo from "@/assets/logos/tech_stack/shadcn-dark.svg"
+import ShadcnWhiteLogo from "@/assets/logos/tech_stack/shadcn-white.svg"
 
 import DeveloperProfile from "@/assets/profiles/profile.jpeg";
 
@@ -103,9 +105,9 @@ export default function App() {
     { name: "VS Code", icon: VscodeLogo },
     { name: "Hostinger", icon: HostingerLogo },
     { name: "Vercel", icon: darkMode ? VercelWhiteLogo : VercelDarkLogo },
+    { name: "Shadcn/ui", icon: darkMode ? ShadcnWhiteLogo : ShadcnDarkLogo },
   ];
 
-  // TODO: add newwing and lifeline, update csco after deployment
   const projects = [
     {
       name: "CMUPin",
@@ -142,11 +144,30 @@ export default function App() {
       name: "CSCo",
       description: "CSCo is the student council organization of the College of Information Sciences and Computing at Central Mindanao University. \"csco.space\" is the first ever website in the history of the organization designed to showcase updates, events, and initiatives from the council, the site serves as a hub for students to stay connected and informed. The website provides a modern, user-friendly space for the college community to engage with their student leaders and access important information.",
       image: screenshotsByProject["project4"]?.find(img => img.includes('project4-1.png')) || (screenshotsByProject["project4"]?.[0] ?? ''),
-      tech: ["React.js", "Hostinger"],
+      tech: ["React.js", "Hostinger", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project4"] || [],
       links: [
         { type: "Website", url: "https://csco.space" },
-        { type: "GitHub", url: "https://github.com/cheesyGarlicBread15/csco_space.git" }
+      ]
+    },
+    {
+      name: "LifeLine Connect",
+      description: "LifeLine Connect is a web-based solution dedicated to improving blood donation efforts and saving lives. By providing up-to-date blood drive schedules, hospital blood inventory tracking, and educational materials, it bridges the gap between donors and healthcare institutions to ensure timely and efficient blood availability.",
+      image: screenshotsByProject["project5"]?.find(img => img.includes('project5-1.png')) || (screenshotsByProject["project5"]?.[0] ?? ''),
+      tech: ["Laravel", "Vue.js", "Hostinger", "Vercel", "Shadcn/ui"],
+      screenshots: screenshotsByProject["project5"] || [],
+      links: [
+        { type: "Website", url: "https://lifelineconnect.online" },
+      ]
+    },
+    {
+      name: "New Wing Renewables",
+      description: "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company’s end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
+      image: screenshotsByProject["project6"]?.find(img => img.includes('project6-1.png')) || (screenshotsByProject["project6"]?.[0] ?? ''),
+      tech: ["Laravel", "React.js", "Hostinger", "Vercel", "Shadcn/ui"],
+      screenshots: screenshotsByProject["project6"] || [],
+      links: [
+        { type: "Website", url: "https://newwingrenewables.com" },
       ]
     },
   ];
