@@ -34,6 +34,7 @@ import ShadcnDarkLogo from "@/assets/logos/tech_stack/shadcn-dark.svg"
 import ShadcnWhiteLogo from "@/assets/logos/tech_stack/shadcn-white.svg"
 
 import DeveloperProfile from "@/assets/profiles/profile.jpeg";
+import { img } from 'framer-motion/client';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -52,12 +53,25 @@ export default function App() {
   );
 
   const screenshotsByProject: Record<string, string[]> = {};
+
+  // put screenshots
   Object.entries(allScreenshots).forEach(([path, url]) => {
     const match = path.match(/screenshots\/([^/]+)\//);
     if (match) {
       const projectName = match[1];
       if (!screenshotsByProject[projectName]) screenshotsByProject[projectName] = [];
       screenshotsByProject[projectName].push(url);
+    }
+  });
+
+  // put main image in front
+  Object.keys(screenshotsByProject).forEach((projectName) => {
+    const mainImgIndex = screenshotsByProject[projectName].findIndex(img =>
+      img.includes(`${projectName}-1`)
+    );
+    if (mainImgIndex > -1) {
+      const [mainImg] = screenshotsByProject[projectName].splice(mainImgIndex, 1);
+      screenshotsByProject[projectName].unshift(mainImg);
     }
   });
 
@@ -112,11 +126,10 @@ export default function App() {
     { name: "Shadcn/ui", icon: darkMode ? ShadcnWhiteLogo : ShadcnDarkLogo },
   ];
 
-  const getMainImage = (projectKey: string) =>
-    screenshotsByProject[projectKey]?.find(img =>
-      img.endsWith(`${projectKey}-1.png`)
-    ) ?? "";
-
+  const getMainImage = (projectKey: string) => {
+    const images = screenshotsByProject[projectKey] || [];
+    return images.find(img => img.includes(`${projectKey}-1`)) ?? images[0] ?? "";
+  };
 
   type Project = {
     name: string;
@@ -194,10 +207,15 @@ export default function App() {
     },
   ];
 
+  console.log(projects)
+
   // modal & carousel helpers
   const openModal = (project: Project, index: number) => {
     setSelectedProject({ ...project, index });
-    setCurrentImageIndex(0);
+    const mainImg = getMainImage(`project${index + 1}`);
+    const mainIndex = project.screenshots.findIndex(s => s === mainImg);
+    console.log(mainIndex)
+    setCurrentImageIndex(mainIndex !== -1 ? mainIndex : 0);
     document.body.style.overflow = 'hidden';
     setTimeout(() => setModalVisible(true), 10);
   };
@@ -332,11 +350,13 @@ export default function App() {
                 ${darkMode ? `bg-gray-900/60 border border-gray-800` : 'bg-white border border-slate-200'}`}
               >
                 <div className="relative w-full bg-gray-800 h-48 flex items-center justify-center">
-                  {project.image ? (
-                    <img src={project.image} alt={project.name} className="max-h-full max-w-full object-contain p-4" />
-                  ) : (
-                    <div className="text-sm text-gray-500">No preview available</div>
-                  )}
+                  {
+                    project.image ? (
+                      <img src={project.image} alt={project.name} className="max-h-full max-w-full object-contain p-4" />
+                    ) : (
+                      <div className="text-sm text-gray-500">No preview available</div>
+                    )
+                  }
                 </div>
 
                 <div className="p-4 md:p-5">
