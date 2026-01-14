@@ -162,7 +162,7 @@ export default function App() {
     },
     {
       name: "New Wing Renewables",
-      description: "LifeLine Connect is a web-based solution dedicated to improving blood donation efforts and saving lives. By providing up-to-date blood drive schedules, hospital blood inventory tracking, and educational materials, it bridges the gap between donors and healthcare institutions to ensure timely and efficient blood availability.",
+      description: "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company’s end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
       image: screenshotsByProject["project6"]?.find(img => img.includes('project6-1.png')) || (screenshotsByProject["project6"]?.[0] ?? ''),
       tech: ["Laravel", "React.js", "Hostinger", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project6"] || [],
