@@ -155,7 +155,7 @@ export default function App() {
     },
     {
       name: "Cosmic Explorer",
-      description: "Cosmic Explorer is a multi-platform app that lets users dive into NASA’s incredible media library. From stunning images and videos to fascinating audio clips, it brings space missions, scientific discoveries, and astronomical phenomena right to your fingertips—whether on mobile, web, or desktop.",
+      description: "Cosmic Explorer is a multi-platform app that lets users dive into NASA's incredible media library. From stunning images and videos to fascinating audio clips, it brings space missions, scientific discoveries, and astronomical phenomena right to your fingertips—whether on mobile, web, or desktop.",
       image: getMainImage("project2"),
       tech: ["Flutter", "Dart", "Firebase", "Supabase"],
       screenshots: screenshotsByProject["project2"] || [],
@@ -196,7 +196,7 @@ export default function App() {
     },
     {
       name: "New Wing Renewables",
-      description: "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company’s end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
+      description: "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company's end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
       image: getMainImage("project6"),
       tech: ["Laravel", "React.js", "Hostinger", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project6"] || [],
@@ -207,6 +207,22 @@ export default function App() {
   ];
 
   console.log(projects)
+
+  // social links
+  const socials = [
+    {
+      label: "GitHub",
+      url: "https://github.com/cheesyGarlicBread15",
+      icon: darkMode ? GithubWhiteLogo : GithubDarkLogo,
+      isImg: true,
+    },
+    {
+      label: "Facebook",
+      url: "https://www.facebook.com/davenvinci.alajid/", // replace with your Facebook URL
+      icon: null,
+      isImg: false,
+    },
+  ];
 
   // modal & carousel helpers
   const openModal = (project: Project, index: number) => {
@@ -253,6 +269,18 @@ export default function App() {
     if ((selectedProject.screenshots || []).length === 0) return;
     setCurrentImageIndex((prev) => (prev - 1 + selectedProject.screenshots.length) % selectedProject.screenshots.length);
   };
+
+  // Facebook SVG icon (inline, theme-aware)
+  const FacebookIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill={darkMode ? '#ffffff' : '#1877F2'}
+    >
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
+    </svg>
+  );
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-gray-950 text-gray-100' : 'bg-white text-gray-900'}`}>
@@ -305,6 +333,30 @@ export default function App() {
                   <p className={`text-base md:text-lg mt-2 opacity-90 ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
                     Architecting robust server-side solutions with Laravel and PHP while building modern, intuitive front-end interfaces using Vue.js and React.js. Specializing in database design and scalable full-stack system architecture.
                   </p>
+
+                  {/* Social Links */}
+                  <div className="flex justify-center md:justify-start gap-3 mt-4">
+                    {socials.map((social) => (
+                      <a
+                        key={social.label}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.label}
+                        className={`p-2.5 rounded-full border transition-all duration-200 hover:scale-110
+                          ${darkMode
+                            ? 'bg-white/5 border-white/10 hover:bg-white/10'
+                            : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                          }`}
+                      >
+                        {social.isImg && social.icon ? (
+                          <img src={social.icon} alt={social.label} className="w-5 h-5" />
+                        ) : (
+                          <FacebookIcon />
+                        )}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 
