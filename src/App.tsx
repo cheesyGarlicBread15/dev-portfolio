@@ -204,9 +204,18 @@ export default function App() {
         { type: "Website", url: "https://newwingrenewables.com" },
       ]
     },
+    {
+      name: "Wildcats 2026",
+      description: "Wildcats 2026 is a website made for the CMU PALARO Team Wildcats consisting of the College of Engineering (COE) and College of Information Sciences and Computing (CISC). Score tallies across different sport events are shown ranging from basketball and volleybally to taekwando and frisbee. Students, faculty and staff can easily check win/loss games and stay updated on how Wildcats is doing throughout the competition.",
+      image: getMainImage("project7"),
+      tech: ["React.js", "Hostinger", "Vercel"],
+      screenshots: screenshotsByProject["project6"] || [],
+      links: [
+        { type: "Website", url: "https://wildcats2026.online" },
+      ]
+    },
   ];
 
-  console.log(projects)
 
   // social links
   const socials = [
