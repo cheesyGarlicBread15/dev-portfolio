@@ -281,7 +281,7 @@ export default function App() {
   ];
 
   const featuredProject = projects[6];
-  const restProjects = projects;
+  const restProjects = projects.splice(0 , projects.length-1);
 
   /* ── social ──────────────────────────────────────────────────────────── */
   const socials = [
