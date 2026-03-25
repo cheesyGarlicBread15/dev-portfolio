@@ -64,14 +64,14 @@ code, .mono {
 
 @keyframes marquee-left {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-25%); }
 }
 @keyframes marquee-right {
-  0%   { transform: translateX(-50%); }
+  0%   { transform: translateX(-25%); }
   100% { transform: translateX(0); }
 }
-.marquee-left  { animation: marquee-left  28s linear infinite; }
-.marquee-right { animation: marquee-right 24s linear infinite; }
+.marquee-left  { animation: marquee-left  42s linear infinite; }
+.marquee-right { animation: marquee-right 38s linear infinite; }
 .marquee-left:hover,
 .marquee-right:hover { animation-play-state: paused; }
 
@@ -357,7 +357,7 @@ export default function App() {
     direction?: 'left' | 'right';
     label: string;
   }) => {
-    const doubled = [...items, ...items]; // duplicate for seamless loop
+    const doubled = [...items, ...items, ...items, ...items]; // duplicate for seamless loop
     return (
       <div className="space-y-2">
         <p className={`text-center text-xs uppercase tracking-widest font-medium mono mb-3
