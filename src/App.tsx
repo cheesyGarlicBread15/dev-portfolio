@@ -7,6 +7,10 @@ import {
   ChevronRight,
   ExternalLink,
   Github,
+  Sparkle,
+  Sparkles,
+  CircleAlert,
+  Circle,
 } from 'lucide-react';
 
 import ReactLogo from "@/assets/logos/tech_stack/react.svg";
@@ -281,7 +285,7 @@ export default function App() {
   ];
 
   const featuredProject = projects[6];
-  const restProjects = projects.splice(0 , projects.length-1);
+  const restProjects = projects.splice(0, projects.length - 1);
 
   /* ── social ──────────────────────────────────────────────────────────── */
   const socials = [
@@ -437,25 +441,26 @@ export default function App() {
         <div className="relative z-10 max-w-5xl mx-auto">
           {/* tag */}
           <div className="flex justify-center mb-6 fade-up fade-up-1">
-            <span className={`mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full border
+            <span className={`mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full border flex items-center gap-1.5
               ${darkMode
                 ? 'border-violet-500/30 text-violet-300 bg-violet-500/10'
                 : 'border-violet-400/40 text-violet-600 bg-violet-50'}`}>
-              ✦ Available for work
+              <Circle className="w-2 h-2 fill-current" />
+              Available for work
             </span>
           </div>
 
           {/* headline */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-center leading-none tracking-tight mb-6 fade-up fade-up-2">
-            I Build with{' '}
+            Hi, I'm{' '}
             <span className={`bg-clip-text text-transparent bg-gradient-to-r ${accent}`}>
-              Purpose
+              Daven
             </span>
           </h1>
 
           <p className={`text-center text-lg md:text-xl max-w-xl mx-auto mb-12 fade-up fade-up-3
             ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
-            Crafting digital experiences with clean code and scalable architecture.
+            Building things for the web — clean on the outside, solid on the inside.
           </p>
 
           {/* profile card */}
@@ -476,11 +481,10 @@ export default function App() {
               </h3>
               <p className={`text-sm md:text-base leading-relaxed mb-4
                 ${darkMode ? 'text-gray-400' : 'text-slate-600'}`}>
-                Architecting robust server-side solutions with Laravel and PHP while building modern,
-                intuitive front-end interfaces using Vue.js and React.js. Specializing in database design
-                and scalable full-stack system architecture.
+                I build full-stack web applications using Laravel and PHP on the backend, with Vue.js
+                and React.js on the frontend. I put a lot of care into database and architectural design, making sure
+                the systems I build don't fall apart when things get serious.
               </p>
-
               {/* social links */}
               <div className="flex justify-center sm:justify-start gap-2">
                 {socials.map(s => (
