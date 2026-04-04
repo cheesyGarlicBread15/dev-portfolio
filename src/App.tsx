@@ -7,9 +7,6 @@ import {
   ChevronRight,
   ExternalLink,
   Github,
-  Sparkle,
-  Sparkles,
-  CircleAlert,
   Circle,
 } from 'lucide-react';
 
