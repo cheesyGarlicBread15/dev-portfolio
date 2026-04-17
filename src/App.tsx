@@ -36,7 +36,7 @@ import VercelWhiteLogo from "@/assets/logos/tech_stack/vercel-white.svg";
 import ShadcnDarkLogo from "@/assets/logos/tech_stack/shadcn-dark.svg";
 import ShadcnWhiteLogo from "@/assets/logos/tech_stack/shadcn-white.svg";
 
-import DeveloperProfile from "@/assets/profiles/profile.jpeg";
+import DeveloperProfile from "@/assets/profiles/profile-barong.jpg";
 
 /* ─── types ─────────────────────────────────────────────────────────────── */
 type Project = {
@@ -476,7 +476,7 @@ export default function App() {
             {/* avatar */}
             <div className={`relative flex-shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden
               ring-2 ${darkMode ? 'ring-violet-500/40' : 'ring-violet-400/50'}`}>
-              <img src={DeveloperProfile} alt="Developer" className="w-full h-full object-cover" />
+              <img src={DeveloperProfile} alt="Developer" className="w-full h-full object-cover object-top" />
             </div>
 
             {/* bio */}
