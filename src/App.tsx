@@ -369,12 +369,16 @@ export default function App() {
             ${darkMode ? "glass-dark" : "glass-light shadow-xl"}`}>
 
             {/* avatar */}
-            <div className={`relative flex-shrink-0 w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden
-              ring-2 ${darkMode ? "ring-violet-500/40" : "ring-violet-400/50"}`}>
-              <img src={DeveloperProfile} alt="Daven Alajid"
-                className="w-full h-full object-cover object-top" />
-            </div>
+            <div className={`relative flex-shrink-0 w-48 h-48 md:w-64 md:h-64 rounded-3xl overflow-hidden
+  ring-2 ${darkMode ? "ring-violet-500/40" : "ring-violet-400/50"}
+  shadow-2xl`}>
 
+              <img
+                src={DeveloperProfile}
+                alt="Daven Alajid"
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
             {/* bio */}
             <div className="flex-1 text-center sm:text-left">
               <h3 className={`text-xl md:text-2xl font-bold mb-1
