@@ -23,6 +23,7 @@ import VercelDarkLogo from "@/assets/logos/tech_stack/vercel-dark.svg";
 import VercelWhiteLogo from "@/assets/logos/tech_stack/vercel-white.svg";
 import ShadcnDarkLogo from "@/assets/logos/tech_stack/shadcn-dark.svg";
 import ShadcnWhiteLogo from "@/assets/logos/tech_stack/shadcn-white.svg";
+import RailwayLogo from "@/assets/logos/tech_stack/railway.svg";
 
 import type { TechCategory, TechItem } from "@/types";
 
@@ -57,6 +58,7 @@ export const getTechCategories = (darkMode: boolean): TechCategory[] => [
             { name: "Canva", icon: CanvaLogo },
             { name: "VS Code", icon: VscodeLogo },
             { name: "Android Studio", icon: AndroidstudioLogo },
+            { name: "Railway", icon: RailwayLogo },
         ],
     },
 ];

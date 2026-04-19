@@ -59,9 +59,9 @@ export default function ProjectsSection({ darkMode }: ProjectsSectionProps) {
         []
     );
 
-    /* The last project is featured; the rest fill the grid */
-    const featuredProject = projects[projects.length - 1];
-    const gridProjects = projects.slice(0, projects.length - 1);
+    /* Projects marked as featured show at top; rest fill the grid */
+    const featuredProject = projects.find((p) => p.featured) || projects[0];
+    const gridProjects = projects.filter((p) => p !== featuredProject);
 
     /* ── modal helpers ─────────────────────────────────────────────────── */
     const openModal = useCallback((project: Project, index: number) => {
@@ -137,18 +137,18 @@ export default function ProjectsSection({ darkMode }: ProjectsSectionProps) {
                     project={featuredProject}
                     darkMode={darkMode}
                     techStack={techStack}
-                    onClick={() => openModal(featuredProject, projects.length - 1)}
+                    onClick={() => openModal(featuredProject, projects.indexOf(featuredProject))}
                 />
 
                 {/* grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {gridProjects.map((project, i) => (
+                    {gridProjects.map((project) => (
                         <ProjectCard
                             key={project.name}
                             project={project}
                             darkMode={darkMode}
                             techStack={techStack}
-                            onClick={() => openModal(project, i)}
+                            onClick={() => openModal(project, projects.indexOf(project))}
                         />
                     ))}
                 </div>

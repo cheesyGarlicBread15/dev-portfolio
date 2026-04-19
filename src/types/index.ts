@@ -20,6 +20,7 @@ export type Project = {
   tech: string[];
   screenshots: string[];
   links: ProjectLink[];
+  featured?: boolean;
 };
 
 export type ProjectWithIndex = Project & { index: number };

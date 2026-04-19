@@ -1,4 +1,5 @@
 import type { Project } from "@/types";
+import { tr } from "framer-motion/client";
 
 /**
  * Screenshot images are glob-imported at runtime (they depend on Vite's
@@ -23,6 +24,7 @@ export const buildProjects = (
           url: "https://github.com/cheesyGarlicBread15/cmupin.git",
         },
       ],
+      featured: false,
     },
     {
       name: "Cosmic Explorer",
@@ -38,6 +40,7 @@ export const buildProjects = (
           url: "https://github.com/cheesyGarlicBread15/cosmic-explorer.git",
         },
       ],
+      featured: false,
     },
     {
       name: "SafeAssist",
@@ -52,50 +55,56 @@ export const buildProjects = (
           url: "https://www.figma.com/proto/lo51BxeeCm9c9yUQP9fUGF/SafeAssist?node-id=48-261&p=f&t=wEA5nZRI0vdUqQy3-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=208%3A274",
         },
       ],
+      featured: false,
     },
     {
       name: "CSCo",
       description:
         "CSCo is the student council organization of the College of Information Sciences and Computing at Central Mindanao University. csco.space is the first ever website in the history of the organization designed to showcase updates, events, and initiatives from the council, the site serves as a hub for students to stay connected and informed. The website provides a modern, user-friendly space for the college community to engage with their student leaders and access important information.",
       image: getMainImage("project4"),
-      tech: ["React.js", "Hostinger", "Vercel", "Shadcn/ui"],
+      tech: ["React.js", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project4"] ?? [],
       links: [{ type: "Website", url: "https://csco.space" }],
+      featured: false,
     },
     {
       name: "LifeLine Connect",
       description:
         "LifeLine Connect is a web-based solution dedicated to improving blood donation efforts and saving lives. By providing up-to-date blood drive schedules, hospital blood inventory tracking, and educational materials, it bridges the gap between donors and healthcare institutions to ensure timely and efficient blood availability.",
       image: getMainImage("project5"),
-      tech: ["Laravel", "Vue.js", "Hostinger", "Vercel", "Shadcn/ui"],
+      tech: ["Laravel", "Vue.js", "Vercel", "Shadcn/ui"],
       screenshots: screenshotsByProject["project5"] ?? [],
       links: [{ type: "Website", url: "https://lifelineconnect.online" }],
+      featured: true,
     },
     {
       name: "New Wing Renewables",
       description:
         "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company's end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
       image: getMainImage("project6"),
-      tech: ["Laravel", "React.js", "Hostinger", "Vercel", "Shadcn/ui"],
+      tech: ["Laravel", "React.js", "Vercel", "Shadcn/ui", "Railway"],
       screenshots: screenshotsByProject["project6"] ?? [],
       links: [{ type: "Website", url: "https://newwingrenewables.com" }],
+      featured: false,
     },
     {
       name: "Wildcats 2026",
       description:
         "Wildcats 2026 is a website made for the CMU PALARO Team Wildcats consisting of the College of Engineering (COE) and College of Information Sciences and Computing (CISC). Score tallies across different sport events are shown ranging from basketball and volleyball to taekwondo and frisbee. Students, faculty and staff can easily check win/loss games and stay updated on how Wildcats is doing throughout the competition.",
       image: getMainImage("project7"),
-      tech: ["React.js", "Hostinger", "Vercel"],
+      tech: ["React.js", "Vercel"],
       screenshots: screenshotsByProject["project7"] ?? [],
       links: [{ type: "Website", url: "https://wildcats2026.online" }],
+      featured: false,
     },
     {
       name: "PRDP Mindanao Cluster",
       description:
         "PRDP Mindanao Cluster is a website developed for the Philippine Rural Development Program (PRDP) to showcase initiatives and projects in the Mindanao region. The site provides a platform for stakeholders to access information about ongoing programs, success stories, and opportunities for collaboration.",
       image: getMainImage("project8"),
-      tech: ["Hostinger", "Laravel", "React.js"],
+      tech: ["Laravel", "React.js", "Railway"],
       screenshots: screenshotsByProject["project8"] ?? [],
       links: [{ type: "Website", url: "https://prdp-mindanao-cluster.com" }],
+      featured: false,
     },
   ];
