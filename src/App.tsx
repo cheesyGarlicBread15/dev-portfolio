@@ -324,7 +324,7 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           HERO
       ══════════════════════════════════════════════════════════════════ */}
-      <section className={`relative overflow-hidden px-6 py-20 md:py-32
+      <section className={`relative overflow-hidden px-6 py-10
         ${darkMode ? "grid-lines" : ""}`}>
 
         {/* orbs */}
