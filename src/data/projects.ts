@@ -82,7 +82,7 @@ export const buildProjects = (
       description:
         "New Wing Renewables is a corporate website developed to present streamlined financing solutions for renewable energy investments. The platform highlights the company's end-to-end investment approach, industry expertise, and commitment to delivering reliable, high-quality outcomes.",
       image: getMainImage("project6"),
-      tech: ["Laravel", "React.js", "Vercel", "Shadcn/ui", "Railway"],
+      tech: ["Laravel", "React.js", "Vercel", "Shadcn/ui", "Railway", "PostgreSQL"],
       screenshots: screenshotsByProject["project6"] ?? [],
       links: [{ type: "Website", url: "https://newwingrenewables.com" }],
       featured: false,
@@ -102,9 +102,9 @@ export const buildProjects = (
       description:
         "PRDP Mindanao Cluster is a website developed for the Philippine Rural Development Program (PRDP) to showcase initiatives and projects in the Mindanao region. The site provides a platform for stakeholders to access information about ongoing programs, success stories, and opportunities for collaboration.",
       image: getMainImage("project8"),
-      tech: ["Laravel", "React.js", "Railway"],
+      tech: ["Laravel", "React.js", "Railway", "Shadcn/ui", "MySQL"],
       screenshots: screenshotsByProject["project8"] ?? [],
-      links: [{ type: "Website", url: "https://prdp-mindanao-cluster.com" }],
+      links: [{ type: "Website", url: "https://prdpmin.online" }],
       featured: false,
     },
   ];
