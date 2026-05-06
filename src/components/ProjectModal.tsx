@@ -184,8 +184,8 @@ export default function ProjectModal({
                     className={`lg:col-span-5 flex flex-col max-h-[94vh] lg:max-h-none overflow-y-auto
                         ${darkMode ? "bg-neutral-950" : "bg-white"}`}
                 >
-                    {/* sticky breadcrumb */}
-                    <div className={`sticky top-0 z-20 px-6 py-4 backdrop-blur-xl
+                    {/* sticky breadcrumb (right-padded to clear floating close button) */}
+                    <div className={`sticky top-0 z-20 pl-6 pr-16 py-4 backdrop-blur-xl
                         flex items-center justify-between
                         ${darkMode
                             ? "bg-neutral-950/85 border-b border-white/8"
