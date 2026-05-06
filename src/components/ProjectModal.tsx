@@ -67,9 +67,10 @@ export default function ProjectModal({
                 onClick={onClose}
             />
 
-            {/* panel */}
+            {/* panel — whole panel scrolls on mobile; columns scroll independently on lg */}
             <div
-                className={`relative w-full max-w-6xl max-h-[94vh] z-10 rounded-2xl overflow-hidden
+                className={`relative w-full max-w-6xl max-h-[94vh] z-10 rounded-2xl
+                    overflow-y-auto overflow-x-hidden lg:overflow-hidden overscroll-contain
                     grid grid-cols-1 lg:grid-cols-12
                     transition-all duration-300 ease-out
                     ${modalVisible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"}
@@ -79,11 +80,11 @@ export default function ProjectModal({
                     }`}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* close — floating top-right always visible */}
+                {/* close — fixed to viewport on mobile so it stays reachable while scrolling */}
                 <button
                     onClick={onClose}
                     aria-label="Close"
-                    className={`absolute top-3 right-3 z-30 p-2 rounded-full backdrop-blur-md cursor-pointer
+                    className={`fixed lg:absolute top-5 right-5 lg:top-3 lg:right-3 z-30 p-2 rounded-full backdrop-blur-md cursor-pointer
                         transition-all duration-150 hover:scale-110
                         ${darkMode
                             ? "bg-black/60 border border-white/15 text-white hover:bg-black/80"
