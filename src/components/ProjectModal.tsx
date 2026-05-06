@@ -96,14 +96,14 @@ export default function ProjectModal({
                 {/* ── LEFT — gallery ───────────────────────────────────── */}
                 <div className="lg:col-span-7 relative flex flex-col bg-black">
                     {/* main image */}
-                    <div className="relative flex-1 min-h-[280px] sm:min-h-[360px] lg:min-h-[520px]
+                    <div className="relative h-[55vh] sm:h-[62vh] lg:h-[74vh] max-h-[820px]
                         flex items-center justify-center overflow-hidden bg-neutral-900">
                         {totalShots > 0 ? (
                             <img
                                 key={currentImageIndex}
                                 src={selectedProject.screenshots[currentImageIndex]}
                                 alt={`${selectedProject.name} screenshot ${currentImageIndex + 1}`}
-                                className="w-full h-full object-contain animate-[fadeUp_0.4s_ease_both]"
+                                className="max-w-full max-h-full w-auto h-auto object-contain animate-[fadeUp_0.4s_ease_both]"
                             />
                         ) : (
                             <div className="text-sm text-stone-500">No screenshots available</div>

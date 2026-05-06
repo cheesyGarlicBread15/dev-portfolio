@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Moon, Sun, ArrowDown, Terminal, Menu, X } from "lucide-react";
+import { ArrowDown, Terminal, Menu, X } from "lucide-react";
 
 import DeveloperProfile from "@/assets/profiles/profile-barong.jpg";
 
@@ -207,11 +207,10 @@ const NAV_LINKS = [
 
 interface NavbarProps {
   darkMode: boolean;
-  toggleDark: () => void;
   active: string;
 }
 
-function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
+function Navbar({ darkMode, active }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -237,7 +236,7 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
     <header className="fixed top-4 inset-x-0 z-50 px-4 pointer-events-none">
       <nav
         className={`pointer-events-auto mx-auto max-w-3xl flex items-center justify-between
-          gap-2 px-3 py-2 rounded-2xl
+          gap-2 px-3 py-3 rounded-2xl
           ${darkMode ? "glass-dark" : "glass-light shadow-lg"}`}
       >
         <a
@@ -268,34 +267,19 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
           ))}
         </ul>
 
-        <div className="flex items-center gap-1.5">
-          <button
-            onClick={toggleDark}
-            aria-label="Toggle theme"
-            className={`p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
-              ${darkMode
-                ? "bg-white/5 border-white/10 hover:bg-white/10"
-                : "bg-white border-slate-200 hover:bg-slate-100"}`}
-          >
-            {darkMode
-              ? <Sun className="w-4 h-4 text-yellow-300" />
-              : <Moon className="w-4 h-4 text-orange-500" />}
-          </button>
-
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            className={`sm:hidden p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
-              ${darkMode
-                ? "bg-white/5 border-white/10 hover:bg-white/10 text-stone-200"
-                : "bg-white border-slate-200 hover:bg-slate-100 text-slate-700"}`}
-          >
-            {menuOpen
-              ? <X className="w-4 h-4" />
-              : <Menu className="w-4 h-4" />}
-          </button>
-        </div>
+        <button
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          className={`sm:hidden p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
+            ${darkMode
+              ? "bg-white/5 border-white/10 hover:bg-white/10 text-stone-200"
+              : "bg-white border-slate-200 hover:bg-slate-100 text-slate-700"}`}
+        >
+          {menuOpen
+            ? <X className="w-4 h-4" />
+            : <Menu className="w-4 h-4" />}
+        </button>
       </nav>
 
       {menuOpen && (
@@ -501,15 +485,26 @@ function Hero({ darkMode, socials }: HeroProps) {
                 full-stack
               </span>
               <br />
-              <span className={darkMode ? "text-white" : "text-slate-900"}>web things that </span>
-              <span className="serif font-normal opacity-90">don't break.</span>
+              <span className={darkMode ? "text-white" : "text-slate-900"}>systems</span>
             </h1>
 
-            <p className={`text-base md:text-lg max-w-xl mb-8 leading-relaxed fade-up fade-up-3
+            <p className={`text-base md:text-lg max-w-xl mb-6 leading-relaxed fade-up fade-up-3
               ${darkMode ? "text-stone-400" : "text-slate-500"}`}>
-              Laravel and PHP on the back, Vue and React on the front. I care about
-              database design and architecture so the systems hold up when things get serious.
+              Laravel and PHP on the back, Vue and React on the front. I build systems that solve company and business processes.
             </p>
+
+            {/* motto */}
+            <div className={`max-w-xl mb-8 fade-up fade-up-3 pl-4 border-l-2
+              ${darkMode ? "border-orange-400/70" : "border-orange-500/70"}`}>
+              <p className={`serif text-lg md:text-xl leading-snug
+                ${darkMode ? "text-stone-200" : "text-slate-700"}`}>
+                "Why first. Code second."
+              </p>
+              <p className={`mono text-[10px] uppercase tracking-[0.22em] mt-1.5
+                ${darkMode ? "text-stone-500" : "text-slate-400"}`}>
+                — find the root, fix what actually moves the business
+              </p>
+            </div>
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3 mb-10 fade-up fade-up-4">
@@ -740,12 +735,12 @@ function Parallax({ children, speed = 0.08, className = "" }: ParallaxProps) {
    App
 ═══════════════════════════════════════════════════════════════════════════ */
 export default function App() {
-  const [darkMode, setDarkMode] = useState(true);
+  const darkMode = true;
   const [activeSection, setActiveSection] = useState<string>("home");
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-  }, [darkMode]);
+    document.documentElement.classList.add("dark");
+  }, []);
 
   useEffect(() => {
     const id = "portfolio-styles";
@@ -786,11 +781,7 @@ export default function App() {
 
       <Splash />
 
-      <Navbar
-        darkMode={darkMode}
-        toggleDark={() => setDarkMode(!darkMode)}
-        active={activeSection}
-      />
+      <Navbar darkMode={darkMode} active={activeSection} />
 
       <Hero darkMode={darkMode} socials={socials} />
 
