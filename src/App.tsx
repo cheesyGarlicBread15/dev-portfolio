@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Moon, Sun, ArrowDown, Sparkles } from "lucide-react";
+import { Moon, Sun, ArrowDown, Terminal } from "lucide-react";
 
 import DeveloperProfile from "@/assets/profiles/profile-barong.jpg";
 
@@ -95,7 +95,7 @@ code, .mono { font-family: 'DM Mono', monospace; }
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(139,92,246,0.6), rgba(34,211,238,0.6));
+  background: linear-gradient(135deg, rgba(249,115,22,0.7), rgba(239,68,68,0.5));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
@@ -144,7 +144,7 @@ code, .mono { font-family: 'DM Mono', monospace; }
   font-size: clamp(64px, 14vw, 160px);
   letter-spacing: -0.02em;
   line-height: 1;
-  background: linear-gradient(135deg, #a78bfa, #f0abfc, #67e8f9);
+  background: linear-gradient(135deg, #fb923c, #f59e0b, #ef4444);
   -webkit-background-clip: text;
           background-clip: text;
   color: transparent;
@@ -214,10 +214,10 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
         <a
           href="#home"
           className={`mono text-xs uppercase tracking-widest px-2 py-1 rounded-lg flex items-center gap-1.5
-            ${darkMode ? "text-violet-300" : "text-violet-600"}`}
+            ${darkMode ? "text-orange-300" : "text-orange-600"}`}
         >
-          <Sparkles className="w-3.5 h-3.5" />
-          daven.dev
+          <Terminal className="w-3.5 h-3.5" />
+          <span>daven<span className={darkMode ? "text-orange-400" : "text-orange-500"}>.</span>dev</span>
         </a>
 
         <ul className="hidden sm:flex items-center gap-1">
@@ -248,7 +248,7 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
         >
           {darkMode
             ? <Sun className="w-4 h-4 text-yellow-300" />
-            : <Moon className="w-4 h-4 text-indigo-500" />}
+            : <Moon className="w-4 h-4 text-orange-500" />}
         </button>
       </nav>
     </header>
@@ -309,7 +309,7 @@ function StackMatrix({ darkMode }: StackMatrixProps) {
         <div className="reveal mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
             <span className={`mono text-[11px] uppercase tracking-[0.2em]
-              ${darkMode ? "text-violet-400" : "text-violet-600"}`}>
+              ${darkMode ? "text-orange-400" : "text-orange-600"}`}>
               02 — toolkit
             </span>
             <h2 className={`mt-2 text-4xl md:text-5xl font-extrabold tracking-tight
@@ -340,8 +340,8 @@ function StackMatrix({ darkMode }: StackMatrixProps) {
                 <div className="flex items-center gap-2.5">
                   <span className={`mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded
                     ${darkMode
-                      ? "bg-violet-500/15 text-violet-300 border border-violet-500/25"
-                      : "bg-violet-100 text-violet-700 border border-violet-200"}`}>
+                      ? "bg-orange-500/15 text-orange-300 border border-orange-500/25"
+                      : "bg-orange-100 text-orange-700 border border-orange-200"}`}>
                     {String(ci + 1).padStart(2, "0")}
                   </span>
                   <h3 className={`text-base md:text-lg font-bold
@@ -367,7 +367,7 @@ function StackMatrix({ darkMode }: StackMatrixProps) {
 
       {/* ambient orb */}
       <div className={`pointer-events-none absolute top-1/2 -right-32 w-96 h-96 rounded-full blur-3xl opacity-10
-        ${darkMode ? "bg-violet-500" : "bg-violet-300"}`} />
+        ${darkMode ? "bg-orange-500" : "bg-orange-300"}`} />
     </section>
   );
 }
@@ -388,8 +388,8 @@ const HERO_STATS = [
 
 function Hero({ darkMode, socials }: HeroProps) {
   const accent = darkMode
-    ? "from-violet-400 via-fuchsia-300 to-cyan-300"
-    : "from-violet-600 via-fuchsia-500 to-cyan-500";
+    ? "from-orange-400 via-amber-300 to-red-300"
+    : "from-orange-600 via-amber-500 to-red-500";
 
   return (
     <section
@@ -400,9 +400,9 @@ function Hero({ darkMode, socials }: HeroProps) {
       {/* orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className={`absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-3xl opacity-20
-          ${darkMode ? "bg-violet-600" : "bg-violet-400"}`} />
+          ${darkMode ? "bg-orange-600" : "bg-orange-400"}`} />
         <div className={`absolute -bottom-24 -right-24 w-[400px] h-[400px] rounded-full blur-3xl opacity-15
-          ${darkMode ? "bg-cyan-500" : "bg-cyan-400"}`} />
+          ${darkMode ? "bg-red-500" : "bg-red-400"}`} />
       </div>
 
       <div className="relative z-10 w-full max-w-6xl mx-auto">
@@ -489,8 +489,8 @@ function Hero({ darkMode, socials }: HeroProps) {
                     aria-label={s.label}
                     className={`p-2.5 rounded-xl border transition-all duration-200 hover:scale-110
                       ${darkMode
-                        ? "bg-white/5 border-white/10 hover:bg-white/12 hover:border-violet-500/40"
-                        : "bg-white border-slate-200 hover:bg-violet-50 hover:border-violet-300"}`}
+                        ? "bg-white/5 border-white/10 hover:bg-white/12 hover:border-orange-500/40"
+                        : "bg-white border-slate-200 hover:bg-orange-50 hover:border-orange-300"}`}
                   >
                     {s.isImg && s.icon
                       ? <img src={s.icon} alt={s.label} className="w-4 h-4" />
@@ -506,9 +506,9 @@ function Hero({ darkMode, socials }: HeroProps) {
             <Parallax speed={0.05} className="relative max-w-sm mx-auto lg:max-w-none fade-up fade-up-1">
               {/* corner decoration */}
               <div className={`absolute -top-3 -left-3 w-12 h-12 border-t-2 border-l-2 rounded-tl-xl
-                ${darkMode ? "border-violet-400/60" : "border-violet-500/60"}`} />
+                ${darkMode ? "border-orange-400/60" : "border-orange-500/60"}`} />
               <div className={`absolute -bottom-3 -right-3 w-12 h-12 border-b-2 border-r-2 rounded-br-xl
-                ${darkMode ? "border-cyan-400/60" : "border-cyan-500/60"}`} />
+                ${darkMode ? "border-red-400/60" : "border-red-500/60"}`} />
 
               {/* portrait */}
               <div className={`relative rounded-2xl overflow-hidden
@@ -591,13 +591,13 @@ function Splash({ darkMode }: { darkMode: boolean }) {
   if (!mounted) return null;
   return (
     <div
-      className={`splash ${darkMode ? "bg-gray-950" : "bg-slate-50"}`}
+      className={`splash ${darkMode ? "bg-black" : "bg-slate-50"}`}
       aria-hidden="true"
     >
       <div className="relative">
         <span className="splash-mark">daven.</span>
         <span
-          className={`splash-rule ${darkMode ? "text-violet-400" : "text-violet-500"}`}
+          className={`splash-rule ${darkMode ? "text-orange-400" : "text-orange-500"}`}
         />
       </div>
     </div>
@@ -739,7 +739,7 @@ export default function App() {
         <div className="max-w-5xl mx-auto px-6 py-20">
           <div className="reveal text-center mb-12">
             <span className={`mono text-[11px] uppercase tracking-[0.22em]
-              ${darkMode ? "text-violet-400" : "text-violet-600"}`}>
+              ${darkMode ? "text-orange-400" : "text-orange-600"}`}>
               04 — contact
             </span>
             <h2 className={`mt-3 text-4xl md:text-6xl font-extrabold tracking-tight
@@ -761,8 +761,8 @@ export default function App() {
                   className={`mono text-xs uppercase tracking-widest px-4 py-2.5 rounded-xl border
                     transition-all duration-200 hover:scale-105 flex items-center gap-2
                     ${darkMode
-                      ? "bg-white/5 border-white/10 text-gray-200 hover:bg-white/10 hover:border-violet-400/40"
-                      : "bg-white border-slate-200 text-slate-700 hover:bg-violet-50 hover:border-violet-300"}`}
+                      ? "bg-white/5 border-white/10 text-gray-200 hover:bg-white/10 hover:border-orange-400/40"
+                      : "bg-white border-slate-200 text-slate-700 hover:bg-orange-50 hover:border-orange-300"}`}
                 >
                   {s.isImg && s.icon
                     ? <img src={s.icon} alt="" className="w-4 h-4" />

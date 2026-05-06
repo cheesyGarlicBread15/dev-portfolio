@@ -25,8 +25,8 @@ export default function ProjectCard({
             className={`reveal group relative rounded-2xl overflow-hidden cursor-pointer h-full flex flex-col
                 transition-all duration-300 hover:-translate-y-1
                 ${darkMode
-                    ? "bg-white/[0.03] border border-white/8 hover:border-violet-400/40 hover:bg-white/[0.06]"
-                    : "bg-white border border-slate-200 hover:border-violet-300 hover:shadow-xl shadow-sm"
+                    ? "bg-white/[0.03] border border-white/8 hover:border-orange-400/40 hover:bg-white/[0.06]"
+                    : "bg-white border border-slate-200 hover:border-orange-300 hover:shadow-xl shadow-sm"
                 }`}
         >
             {/* image with overlay */}
@@ -82,8 +82,8 @@ export default function ProjectCard({
                     className={`text-lg font-bold leading-tight tracking-tight
                         transition-colors duration-200
                         ${darkMode
-                            ? "text-white group-hover:text-violet-300"
-                            : "text-slate-900 group-hover:text-violet-700"}`}
+                            ? "text-white group-hover:text-orange-300"
+                            : "text-slate-900 group-hover:text-orange-700"}`}
                 >
                     {project.name}
                 </h3>

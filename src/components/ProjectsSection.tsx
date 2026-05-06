@@ -116,7 +116,7 @@ export default function ProjectsSection({ darkMode }: ProjectsSectionProps) {
                 <div className="reveal mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                     <div>
                         <span className={`mono text-[11px] uppercase tracking-[0.22em]
-                            ${darkMode ? "text-violet-400" : "text-violet-600"}`}>
+                            ${darkMode ? "text-orange-400" : "text-orange-600"}`}>
                             03 — selected work
                         </span>
                         <h2 className={`mt-2 text-4xl md:text-5xl font-extrabold tracking-tight

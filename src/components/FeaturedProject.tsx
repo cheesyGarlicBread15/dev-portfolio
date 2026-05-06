@@ -21,8 +21,8 @@ export default function FeaturedProject({
             className={`reveal group relative cursor-pointer mb-16 rounded-3xl overflow-hidden
                 transition-all duration-500
                 ${darkMode
-                    ? "bg-gradient-to-br from-white/[0.04] to-transparent border border-white/8 hover:border-violet-400/40"
-                    : "bg-gradient-to-br from-white to-slate-50 border border-slate-200 hover:border-violet-300 shadow-lg hover:shadow-2xl"
+                    ? "bg-gradient-to-br from-white/[0.04] to-transparent border border-white/8 hover:border-orange-400/40"
+                    : "bg-gradient-to-br from-white to-slate-50 border border-slate-200 hover:border-orange-300 shadow-lg hover:shadow-2xl"
                 }`}
         >
             {/* layered grid */}

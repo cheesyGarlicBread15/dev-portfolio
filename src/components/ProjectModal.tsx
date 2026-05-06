@@ -1,4 +1,12 @@
-import { X, ChevronLeft, ChevronRight, Github, ExternalLink } from "lucide-react";
+import { useEffect } from "react";
+import {
+    X,
+    ChevronLeft,
+    ChevronRight,
+    Github,
+    ArrowUpRight,
+    Maximize2,
+} from "lucide-react";
 import TechBadge from "@/components/TechBadge";
 import type { ProjectWithIndex, TechItem } from "@/types";
 
@@ -29,230 +37,287 @@ export default function ProjectModal({
     onPrevImage,
     onSelectImage,
 }: ProjectModalProps) {
-    const accent = darkMode
-        ? "from-violet-500 via-fuchsia-400 to-cyan-400"
-        : "from-violet-600 via-fuchsia-500 to-cyan-500";
+    const totalShots = selectedProject.screenshots.length;
+    const hasMultiple = totalShots > 1;
+
+    /* keyboard navigation */
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (!modalVisible) return;
+            if (e.key === "Escape") onClose();
+            else if (e.key === "ArrowRight") {
+                if (e.shiftKey) onNext();
+                else if (hasMultiple) onNextImage();
+            } else if (e.key === "ArrowLeft") {
+                if (e.shiftKey) onPrev();
+                else if (hasMultiple) onPrevImage();
+            }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [modalVisible, hasMultiple, onClose, onNext, onPrev, onNextImage, onPrevImage]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6">
             {/* backdrop */}
             <div
-                className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-200
-          ${modalVisible ? "opacity-100" : "opacity-0"}`}
+                className={`absolute inset-0 transition-opacity duration-300
+                    ${modalVisible ? "opacity-100" : "opacity-0"}
+                    ${darkMode ? "bg-black/85" : "bg-black/50"} backdrop-blur-md`}
                 onClick={onClose}
             />
 
             {/* panel */}
             <div
-                className={`relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl z-10
-          transition-all duration-200 transform
-          ${modalVisible
-                        ? "opacity-100 scale-100 translate-y-0"
-                        : "opacity-0 scale-95 -translate-y-4"
-                    }
-          ${darkMode
-                        ? "bg-gray-900/95 border border-white/10 backdrop-blur-2xl"
+                className={`relative w-full max-w-6xl max-h-[94vh] z-10 rounded-2xl overflow-hidden
+                    grid grid-cols-1 lg:grid-cols-12
+                    transition-all duration-300 ease-out
+                    ${modalVisible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"}
+                    ${darkMode
+                        ? "bg-neutral-950 border border-white/10 shadow-[0_30px_120px_rgba(0,0,0,0.6)]"
                         : "bg-white border border-slate-200 shadow-2xl"
                     }`}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* top accent */}
-                <div
-                    className={`absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r ${accent}`}
-                />
-
-                {/* header row */}
-                <div
-                    className={`sticky top-0 z-20 flex items-center justify-between px-6 py-4 rounded-t-2xl
-            ${darkMode
-                            ? "bg-gray-900/90 backdrop-blur-xl border-b border-white/6"
-                            : "bg-white/90 backdrop-blur-xl border-b border-slate-100"
+                {/* close — floating top-right always visible */}
+                <button
+                    onClick={onClose}
+                    aria-label="Close"
+                    className={`absolute top-3 right-3 z-30 p-2 rounded-full backdrop-blur-md cursor-pointer
+                        transition-all duration-150 hover:scale-110
+                        ${darkMode
+                            ? "bg-black/60 border border-white/15 text-white hover:bg-black/80"
+                            : "bg-white/85 border border-white/60 text-slate-700 hover:bg-white"
                         }`}
                 >
-                    <button
-                        onClick={onPrev}
-                        aria-label="Previous project"
-                        className={`p-2 rounded-lg transition-all duration-150 cursor-pointer
-              ${darkMode
-                                ? "hover:bg-white/8 text-gray-300"
-                                : "hover:bg-slate-100 text-slate-600"
-                            }`}
-                    >
-                        <ChevronLeft className="w-5 h-5" />
-                    </button>
+                    <X className="w-4 h-4" />
+                </button>
 
-                    <h2
-                        className={`text-lg md:text-xl font-bold ${darkMode ? "text-white" : "text-slate-900"
-                            }`}
-                    >
-                        {selectedProject.name}
-                    </h2>
-
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={onNext}
-                            aria-label="Next project"
-                            className={`p-2 rounded-lg transition-all duration-150 cursor-pointer
-                ${darkMode
-                                    ? "hover:bg-white/8 text-gray-300"
-                                    : "hover:bg-slate-100 text-slate-600"
-                                }`}
-                        >
-                            <ChevronRight className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={onClose}
-                            aria-label="Close modal"
-                            className={`p-2 rounded-lg transition-all duration-150 cursor-pointer
-                ${darkMode
-                                    ? "bg-red-500/15 border border-red-500/20 text-red-400 hover:bg-red-500/25"
-                                    : "bg-red-50 border border-red-200 text-red-500 hover:bg-red-100"
-                                }`}
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
-
-                {/* body */}
-                <div className="p-6 md:p-8 space-y-6">
-                    {/* description */}
-                    <p
-                        className={`text-sm md:text-base leading-relaxed
-              ${darkMode ? "text-gray-300" : "text-slate-600"}`}
-                    >
-                        {selectedProject.description}
-                    </p>
-
-                    {/* tech badges */}
-                    <div className="flex flex-wrap gap-2">
-                        {selectedProject.tech.map((t, i) => (
-                            <TechBadge
-                                key={i}
-                                name={t}
-                                darkMode={darkMode}
-                                techStack={techStack}
+                {/* ── LEFT — gallery ───────────────────────────────────── */}
+                <div className="lg:col-span-7 relative flex flex-col bg-black">
+                    {/* main image */}
+                    <div className="relative flex-1 min-h-[280px] sm:min-h-[360px] lg:min-h-[520px]
+                        flex items-center justify-center overflow-hidden bg-neutral-900">
+                        {totalShots > 0 ? (
+                            <img
+                                key={currentImageIndex}
+                                src={selectedProject.screenshots[currentImageIndex]}
+                                alt={`${selectedProject.name} screenshot ${currentImageIndex + 1}`}
+                                className="w-full h-full object-contain animate-[fadeUp_0.4s_ease_both]"
                             />
-                        ))}
+                        ) : (
+                            <div className="text-sm text-gray-500">No screenshots available</div>
+                        )}
+
+                        {hasMultiple && (
+                            <>
+                                <button
+                                    onClick={onPrevImage}
+                                    aria-label="Previous screenshot"
+                                    className="cursor-pointer absolute left-3 top-1/2 -translate-y-1/2
+                                        w-10 h-10 flex items-center justify-center rounded-full backdrop-blur-md
+                                        bg-black/50 border border-white/15 text-white
+                                        hover:bg-black/70 transition-all duration-150 hover:scale-110"
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                </button>
+                                <button
+                                    onClick={onNextImage}
+                                    aria-label="Next screenshot"
+                                    className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2
+                                        w-10 h-10 flex items-center justify-center rounded-full backdrop-blur-md
+                                        bg-black/50 border border-white/15 text-white
+                                        hover:bg-black/70 transition-all duration-150 hover:scale-110"
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </button>
+                            </>
+                        )}
+
+                        {totalShots > 0 && (
+                            <span className="mono absolute bottom-3 right-3 text-[10px] uppercase tracking-widest
+                                px-2.5 py-1 rounded-md backdrop-blur-md bg-black/55 border border-white/15 text-white">
+                                {String(currentImageIndex + 1).padStart(2, "0")} / {String(totalShots).padStart(2, "0")}
+                            </span>
+                        )}
+
+                        {totalShots > 0 && (
+                            <a
+                                href={selectedProject.screenshots[currentImageIndex]}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Open image"
+                                className="absolute bottom-3 left-3 p-2 rounded-md backdrop-blur-md
+                                    bg-black/55 border border-white/15 text-white
+                                    hover:bg-black/75 transition-all duration-150 hover:scale-110"
+                            >
+                                <Maximize2 className="w-3.5 h-3.5" />
+                            </a>
+                        )}
                     </div>
 
-                    {/* links */}
-                    {selectedProject.links.length > 0 && (
-                        <div className="flex flex-wrap gap-3">
-                            {selectedProject.links.map((link, i) => (
-                                <a
+                    {/* thumbnail strip */}
+                    {hasMultiple && (
+                        <div className={`px-3 py-3 flex gap-2 overflow-x-auto
+                            ${darkMode ? "bg-neutral-950 border-t border-white/8" : "bg-slate-50 border-t border-slate-200"}`}>
+                            {selectedProject.screenshots.map((s, i) => (
+                                <button
                                     key={i}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-105
-                    ${darkMode
-                                            ? "bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10 hover:border-violet-500/40"
-                                            : "bg-slate-50 border border-slate-200 text-slate-700 hover:bg-violet-50 hover:border-violet-300"
+                                    onClick={() => onSelectImage(i)}
+                                    aria-label={`Show screenshot ${i + 1}`}
+                                    className={`relative flex-shrink-0 w-20 h-12 rounded-md overflow-hidden cursor-pointer
+                                        transition-all duration-200
+                                        ${i === currentImageIndex
+                                            ? "ring-2 ring-orange-500 scale-[1.04]"
+                                            : "opacity-50 hover:opacity-100"
                                         }`}
                                 >
-                                    {link.type === "GitHub" ? (
-                                        <Github className="w-4 h-4" />
-                                    ) : (
-                                        <ExternalLink className="w-4 h-4" />
-                                    )}
-                                    {link.type}
-                                </a>
+                                    <img src={s} alt="" className="w-full h-full object-cover" />
+                                </button>
                             ))}
                         </div>
                     )}
+                </div>
 
-                    {/* screenshot viewer */}
-                    <div className="space-y-3">
-                        <div
-                            className={`relative w-full rounded-xl overflow-hidden border
-                ${darkMode
-                                    ? "border-white/8 bg-gray-800/60"
-                                    : "border-slate-200 bg-slate-50"
-                                }`}
-                            style={{ aspectRatio: "16/9" }}
-                        >
-                            {selectedProject.screenshots.length > 0 ? (
-                                <img
-                                    src={selectedProject.screenshots[currentImageIndex]}
-                                    alt={`Screenshot ${currentImageIndex + 1}`}
-                                    className="w-full h-full object-contain p-2"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-sm text-gray-500">
-                                    No screenshots available
-                                </div>
-                            )}
+                {/* ── RIGHT — content ──────────────────────────────────── */}
+                <aside
+                    className={`lg:col-span-5 flex flex-col max-h-[94vh] lg:max-h-none overflow-y-auto
+                        ${darkMode ? "bg-neutral-950" : "bg-white"}`}
+                >
+                    {/* sticky breadcrumb */}
+                    <div className={`sticky top-0 z-20 px-6 py-4 backdrop-blur-xl
+                        flex items-center justify-between
+                        ${darkMode
+                            ? "bg-neutral-950/85 border-b border-white/8"
+                            : "bg-white/90 border-b border-slate-100"}`}>
+                        <span className={`mono text-[10px] uppercase tracking-[0.22em]
+                            ${darkMode ? "text-orange-400" : "text-orange-600"}`}>
+                            Project · {String(selectedProject.index + 1).padStart(2, "0")}
+                        </span>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={onPrev}
+                                aria-label="Previous project"
+                                className={`p-1.5 rounded-md cursor-pointer transition-colors
+                                    ${darkMode
+                                        ? "text-gray-400 hover:bg-white/8 hover:text-white"
+                                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"}`}
+                            >
+                                <ChevronLeft className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={onNext}
+                                aria-label="Next project"
+                                className={`p-1.5 rounded-md cursor-pointer transition-colors
+                                    ${darkMode
+                                        ? "text-gray-400 hover:bg-white/8 hover:text-white"
+                                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"}`}
+                            >
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
 
-                            {selectedProject.screenshots.length > 1 && (
-                                <>
-                                    <button
-                                        onClick={onPrevImage}
-                                        aria-label="Previous screenshot"
-                                        className={`cursor-pointer absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full backdrop-blur-md
-                      ${darkMode
-                                                ? "bg-black/50 text-gray-200"
-                                                : "bg-white/80 text-slate-700"
-                                            }`}
-                                    >
-                                        <ChevronLeft className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={onNextImage}
-                                        aria-label="Next screenshot"
-                                        className={`cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full backdrop-blur-md
-                      ${darkMode
-                                                ? "bg-black/50 text-gray-200"
-                                                : "bg-white/80 text-slate-700"
-                                            }`}
-                                    >
-                                        <ChevronRight className="w-4 h-4" />
-                                    </button>
-                                </>
+                    {/* body */}
+                    <div className="flex-1 px-6 py-6 space-y-6">
+                        <div>
+                            <h2
+                                className={`text-2xl md:text-3xl font-extrabold tracking-tight leading-tight
+                                    ${darkMode ? "text-white" : "text-slate-900"}`}
+                            >
+                                {selectedProject.name}
+                            </h2>
+                            {selectedProject.featured && (
+                                <span className={`mt-2 inline-flex items-center gap-1.5 mono text-[10px] uppercase tracking-widest
+                                    px-2 py-0.5 rounded-md
+                                    ${darkMode
+                                        ? "bg-orange-500/15 text-orange-300 border border-orange-500/25"
+                                        : "bg-orange-50 text-orange-700 border border-orange-200"}`}>
+                                    ★ Featured Work
+                                </span>
                             )}
                         </div>
 
-                        {/* thumbnails */}
-                        {selectedProject.screenshots.length > 1 && (
-                            <div className="flex gap-2 overflow-x-auto py-1 px-0.5">
-                                {selectedProject.screenshots.map((s, i) => (
-                                    <button
+                        <p
+                            className={`text-sm md:text-base leading-relaxed
+                                ${darkMode ? "text-gray-300" : "text-slate-600"}`}
+                        >
+                            {selectedProject.description}
+                        </p>
+
+                        <div className={`h-px ${darkMode ? "bg-white/8" : "bg-slate-100"}`} />
+
+                        <div>
+                            <h4 className={`mono text-[10px] uppercase tracking-[0.22em] mb-3
+                                ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                                Built with
+                            </h4>
+                            <div className="flex flex-wrap gap-1.5">
+                                {selectedProject.tech.map((t, i) => (
+                                    <TechBadge
                                         key={i}
-                                        onClick={() => onSelectImage(i)}
-                                        aria-label={`View screenshot ${i + 1}`}
-                                        className={`flex-shrink-0 w-20 h-12 rounded-lg overflow-hidden border transition-all duration-150 cursor-pointer
-                      ${i === currentImageIndex
-                                                ? `ring-2 ring-offset-1 scale-105 ${darkMode
-                                                    ? "ring-violet-500 ring-offset-gray-900"
-                                                    : "ring-violet-400 ring-offset-white"
-                                                }`
-                                                : `opacity-60 hover:opacity-90 ${darkMode
-                                                    ? "border-white/10"
-                                                    : "border-slate-200"
-                                                }`
-                                            }`}
-                                    >
-                                        <img
-                                            src={s}
-                                            alt={`Thumbnail ${i + 1}`}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </button>
+                                        name={t}
+                                        darkMode={darkMode}
+                                        techStack={techStack}
+                                        size="sm"
+                                    />
                                 ))}
                             </div>
-                        )}
+                        </div>
 
-                        <p
-                            className={`text-center mono text-xs
-                ${darkMode ? "text-gray-600" : "text-slate-400"}`}
-                        >
-                            {selectedProject.screenshots.length > 0
-                                ? currentImageIndex + 1
-                                : 0}{" "}
-                            / {selectedProject.screenshots.length}
-                        </p>
+                        {selectedProject.links.length > 0 && (
+                            <>
+                                <div className={`h-px ${darkMode ? "bg-white/8" : "bg-slate-100"}`} />
+                                <div>
+                                    <h4 className={`mono text-[10px] uppercase tracking-[0.22em] mb-3
+                                        ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                                        Links
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedProject.links.map((link, i) => {
+                                            const isGithub = link.type === "GitHub";
+                                            return (
+                                                <a
+                                                    key={i}
+                                                    href={link.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={`group/btn flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold
+                                                        transition-all duration-200 hover:scale-[1.03]
+                                                        ${isGithub
+                                                            ? darkMode
+                                                                ? "bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10"
+                                                                : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+                                                            : darkMode
+                                                                ? "bg-orange-500 text-black hover:bg-orange-400"
+                                                                : "bg-orange-500 text-white hover:bg-orange-600"
+                                                        }`}
+                                                >
+                                                    {isGithub ? (
+                                                        <Github className="w-3.5 h-3.5" />
+                                                    ) : (
+                                                        <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                                                    )}
+                                                    {isGithub ? "Source" : "Visit Live"}
+                                                </a>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
-                </div>
+
+                    {/* keyboard hints footer */}
+                    <div className={`mono text-[10px] uppercase tracking-widest px-6 py-3 flex flex-wrap gap-x-4 gap-y-1
+                        ${darkMode
+                            ? "bg-white/[0.02] border-t border-white/8 text-gray-500"
+                            : "bg-slate-50 border-t border-slate-200 text-slate-400"}`}>
+                        <span><kbd className="font-bold">esc</kbd> close</span>
+                        <span><kbd className="font-bold">←/→</kbd> gallery</span>
+                        <span><kbd className="font-bold">Shift ⇧  ←/→</kbd> project</span>
+                    </div>
+                </aside>
             </div>
         </div>
     );
