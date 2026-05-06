@@ -108,28 +108,26 @@ export default function ProjectsSection({ darkMode }: ProjectsSectionProps) {
         );
     }, [selectedProject]);
 
-    /* ── section heading ─────────────────────────────────────────────── */
-    const divider = (
-        <div
-            className={`h-px flex-1 max-w-[80px] ${darkMode ? "bg-white/10" : "bg-slate-200"
-                }`}
-        />
-    );
-
     return (
-        <section className="px-6 py-16 md:py-24">
+        <section className="px-6 py-24 md:py-32">
             <div className="max-w-7xl mx-auto">
 
                 {/* heading */}
-                <div className="flex items-center gap-4 justify-center mb-12">
-                    {divider}
-                    <h2
-                        className={`text-2xl md:text-3xl font-bold tracking-tight
-              ${darkMode ? "text-white" : "text-slate-900"}`}
-                    >
-                        Projects
-                    </h2>
-                    {divider}
+                <div className="reveal mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                    <div>
+                        <span className={`mono text-[11px] uppercase tracking-[0.22em]
+                            ${darkMode ? "text-violet-400" : "text-violet-600"}`}>
+                            03 — selected work
+                        </span>
+                        <h2 className={`mt-2 text-4xl md:text-5xl font-extrabold tracking-tight
+                            ${darkMode ? "text-white" : "text-slate-900"}`}>
+                            Things I've <span className="serif font-normal opacity-90">built.</span>
+                        </h2>
+                    </div>
+                    <p className={`max-w-md text-sm md:text-base
+                        ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+                        A handful of projects spanning fullstack web, dashboards, and tools — click any card for details.
+                    </p>
                 </div>
 
                 {/* featured */}
@@ -142,12 +140,13 @@ export default function ProjectsSection({ darkMode }: ProjectsSectionProps) {
 
                 {/* grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {gridProjects.map((project) => (
+                    {gridProjects.map((project, i) => (
                         <ProjectCard
                             key={project.name}
                             project={project}
                             darkMode={darkMode}
                             techStack={techStack}
+                            index={i}
                             onClick={() => openModal(project, projects.indexOf(project))}
                         />
                     ))}

@@ -1,4 +1,4 @@
-import { ExternalLink, Github } from "lucide-react";
+import { ArrowUpRight, Github } from "lucide-react";
 import TechBadge from "@/components/TechBadge";
 import type { Project, TechItem } from "@/types";
 
@@ -15,80 +15,101 @@ export default function FeaturedProject({
     techStack,
     onClick,
 }: FeaturedProjectProps) {
-    const accent = darkMode
-        ? "from-violet-500 via-fuchsia-400 to-cyan-400"
-        : "from-violet-600 via-fuchsia-500 to-cyan-500";
-
     return (
         <div
             onClick={onClick}
-            className={`group relative rounded-2xl overflow-hidden cursor-pointer card-hover mb-8
-        ${darkMode
-                    ? "bg-gray-900/60 border border-white/8 hover:border-violet-500/40"
-                    : "bg-white border border-slate-200 hover:border-violet-300 shadow-md"
+            className={`reveal group relative cursor-pointer mb-16 rounded-3xl overflow-hidden
+                transition-all duration-500
+                ${darkMode
+                    ? "bg-gradient-to-br from-white/[0.04] to-transparent border border-white/8 hover:border-violet-400/40"
+                    : "bg-gradient-to-br from-white to-slate-50 border border-slate-200 hover:border-violet-300 shadow-lg hover:shadow-2xl"
                 }`}
         >
-            {/* gradient accent bar */}
-            <div
-                className={`absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r ${accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-            />
+            {/* layered grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
-            <div className="flex flex-col lg:flex-row">
-                {/* image */}
-                <div
-                    className={`relative lg:w-3/5 h-56 sm:h-72 lg:h-auto min-h-[280px] flex items-center justify-center overflow-hidden
-            ${darkMode ? "bg-gray-800/50" : "bg-slate-100"}`}
-                >
-                    {project.image ? (
-                        <img
-                            src={project.image}
-                            alt={project.name}
-                            className="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
-                        />
-                    ) : (
-                        <span className="text-sm text-gray-500">No preview</span>
-                    )}
-
-                    {/* featured badge */}
-                    <span
-                        className={`absolute top-4 left-4 mono text-xs px-3 py-1 rounded-full uppercase tracking-wider
-              ${darkMode
-                                ? "bg-violet-500/20 border border-violet-500/30 text-violet-300"
-                                : "bg-violet-50 border border-violet-200 text-violet-600"
-                            }`}
+                {/* image — 7 cols */}
+                <div className="lg:col-span-7 relative overflow-hidden">
+                    <div
+                        className={`relative h-72 sm:h-96 lg:h-[460px] flex items-center justify-center overflow-hidden
+                            ${darkMode ? "bg-gray-900/40" : "bg-slate-100/80"}`}
                     >
-                        Featured
-                    </span>
+                        {project.image ? (
+                            <img
+                                src={project.image}
+                                alt={project.name}
+                                className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+                            />
+                        ) : (
+                            <span className="text-sm text-gray-500">No preview</span>
+                        )}
+
+                        {/* dark gradient bottom on image */}
+                        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+
+                        {/* index badge */}
+                        <div
+                            className={`absolute top-5 left-5 mono text-[11px] uppercase tracking-[0.22em] flex items-center gap-2
+                                ${darkMode ? "text-white/85" : "text-white"}`}
+                        >
+                            <span className={`px-2.5 py-1 rounded-md backdrop-blur-md
+                                ${darkMode
+                                    ? "bg-black/40 border border-white/15"
+                                    : "bg-black/35 border border-white/20"}`}>
+                                ★ Featured
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
-                {/* content */}
-                <div className="lg:w-2/5 p-6 md:p-8 flex flex-col justify-between">
+                {/* content — 5 cols */}
+                <div className="lg:col-span-5 p-6 md:p-8 lg:p-10 flex flex-col justify-between">
                     <div>
+                        {/* meta row */}
+                        <div className="flex items-center gap-3 mb-5">
+                            <span
+                                className={`text-4xl md:text-5xl font-extrabold leading-none
+                                    ${darkMode ? "text-white/15" : "text-slate-200"}`}
+                            >
+                                01
+                            </span>
+                            <div className={`h-px flex-1 ${darkMode ? "bg-white/10" : "bg-slate-200"}`} />
+                            <span
+                                className={`mono text-[10px] uppercase tracking-widest
+                                    ${darkMode ? "text-gray-500" : "text-slate-400"}`}
+                            >
+                                Featured Work
+                            </span>
+                        </div>
+
                         <h3
-                            className={`text-2xl md:text-3xl font-bold mb-3
-                ${darkMode ? "text-white" : "text-slate-900"}`}
+                            className={`text-3xl md:text-4xl font-extrabold mb-4 tracking-tight leading-tight
+                                ${darkMode ? "text-white" : "text-slate-900"}`}
                         >
                             {project.name}
                         </h3>
+
                         <p
-                            className={`text-sm md:text-base leading-relaxed mb-5
-                ${darkMode ? "text-gray-400" : "text-slate-600"}`}
+                            className={`text-sm md:text-base leading-relaxed mb-6
+                                ${darkMode ? "text-gray-400" : "text-slate-600"}`}
                         >
                             {project.description}
                         </p>
-                        <div className="flex flex-wrap gap-2 mb-6">
+
+                        <div className="flex flex-wrap gap-1.5 mb-7">
                             {project.tech.map((t) => (
                                 <TechBadge
                                     key={t}
                                     name={t}
                                     darkMode={darkMode}
                                     techStack={techStack}
+                                    size="sm"
                                 />
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
                         {project.links.map((l, i) => (
                             <a
                                 key={i}
@@ -96,20 +117,30 @@ export default function FeaturedProject({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105
-                  ${darkMode
-                                        ? "bg-violet-500/20 border border-violet-500/30 text-violet-300 hover:bg-violet-500/30"
-                                        : "bg-violet-50 border border-violet-200 text-violet-700 hover:bg-violet-100"
+                                className={`group/btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
+                                    transition-all duration-200 hover:scale-[1.03]
+                                    ${l.type === "GitHub"
+                                        ? darkMode
+                                            ? "bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10"
+                                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+                                        : darkMode
+                                            ? "bg-white text-slate-900 hover:bg-gray-100"
+                                            : "bg-slate-900 text-white hover:bg-slate-800"
                                     }`}
                             >
                                 {l.type === "GitHub" ? (
                                     <Github className="w-4 h-4" />
                                 ) : (
-                                    <ExternalLink className="w-4 h-4" />
+                                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                                 )}
-                                {l.type}
+                                {l.type === "GitHub" ? "Source" : "Live"}
                             </a>
                         ))}
+
+                        <span className={`mono text-[10px] uppercase tracking-widest ml-auto
+                            ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+                            Click to view →
+                        </span>
                     </div>
                 </div>
             </div>

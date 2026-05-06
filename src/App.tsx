@@ -1,36 +1,54 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { Moon, Sun, Circle } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { Moon, Sun, ArrowDown, Sparkles } from "lucide-react";
 
 import DeveloperProfile from "@/assets/profiles/profile-barong.jpg";
 
 import { getTechCategories } from "@/data/techStack";
 import { getSocials } from "@/data/socials";
 import ProjectsSection from "@/components/ProjectsSection";
+import type { TechItem } from "@/types";
 
 /* ─── global CSS (injected once) ─────────────────────────────────────────── */
-const MARQUEE_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+const PORTFOLIO_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif&display=swap');
 
 * { box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
 body { font-family: 'Syne', sans-serif; }
 code, .mono { font-family: 'DM Mono', monospace; }
+.serif { font-family: 'Instrument Serif', serif; font-style: italic; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .fade-up   { animation: fadeUp 0.7s ease both; }
-.fade-up-1 { animation-delay: 0.1s; }
-.fade-up-2 { animation-delay: 0.22s; }
-.fade-up-3 { animation-delay: 0.34s; }
-.fade-up-4 { animation-delay: 0.46s; }
+.fade-up-1 { animation-delay: 0.08s; }
+.fade-up-2 { animation-delay: 0.18s; }
+.fade-up-3 { animation-delay: 0.30s; }
+.fade-up-4 { animation-delay: 0.42s; }
+.fade-up-5 { animation-delay: 0.54s; }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0); }
-  50%       { box-shadow: 0 0 24px 4px rgba(139,92,246,0.25); }
+@keyframes blink-soft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
 }
-.glow-pulse { animation: pulse-glow 3s ease-in-out infinite; }
+.blink-dot { animation: blink-soft 2s ease-in-out infinite; }
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-text {
+  background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+}
 
 .noise-bg::before {
   content: '';
@@ -53,224 +71,597 @@ code, .mono { font-family: 'DM Mono', monospace; }
   border: 1px solid rgba(255,255,255,0.5);
 }
 
-.card-hover {
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-}
-
 .grid-lines {
   background-image:
     linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 48px 48px;
 }
-
-.marquee-track {
-  will-change: transform;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
+.grid-lines-light {
+  background-image:
+    linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
-.marquee-track.is-dragging {
-  cursor: grabbing;
+
+/* ─── tech tile ─────────────────────────────────────────────────────────── */
+.tech-tile {
+  position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+.tech-tile::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.6), rgba(34,211,238,0.6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.tech-tile:hover { transform: translateY(-3px); }
+.tech-tile:hover::after { opacity: 1; }
+
+/* ─── scroll reveal ────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── splash ────────────────────────────────────────────────────────────── */
+@keyframes splash-stroke {
+  0%   { stroke-dashoffset: 240; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes splash-fadeout {
+  0%   { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; }
+}
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: splash-fadeout 0.7s ease 1.4s forwards;
+}
+.splash-mark {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(64px, 14vw, 160px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(135deg, #a78bfa, #f0abfc, #67e8f9);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  position: relative;
+  animation: fadeUp 0.6s ease 0.05s both;
+}
+.splash-rule {
+  position: absolute;
+  bottom: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 1px;
+  overflow: hidden;
+}
+.splash-rule::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  transform: translateX(-100%);
+  animation: splash-sweep 1.2s ease 0.1s forwards;
+}
+@keyframes splash-sweep {
+  to { transform: translateX(100%); }
+}
+
+/* nav active pill */
+.nav-pill { position: relative; }
+.nav-pill[data-active="true"]::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  transform: translateX(-50%);
+  background: currentColor;
 }
 `;
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   useDraggableMarquee
-   ─────────────────────────────────────────────────────────────────────────
-   Drives a seamless looping marquee via rAF (no CSS animation).
-   • Auto-scrolls at `speed` px/frame in the given direction.
-   • On drag: pause auto-scroll, track pointer delta.
-   • On release: apply momentum (fling), decay with friction, then resume.
+   Navbar
 ═══════════════════════════════════════════════════════════════════════════ */
-function useDraggableMarquee(direction: "left" | "right", speed = 0.28) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const offset = useRef(0);        // current translateX in px
-  const half = useRef(0);        // half the total track width (loop boundary)
-  const rafId = useRef(0);
-  const dragging = useRef(false);
-  const lastX = useRef(0);
-  const lastTime = useRef(0);
-  const velocity = useRef(0);        // px/frame carry-over from drag
+const NAV_LINKS = [
+  { id: "home", label: "Home" },
+  { id: "stack", label: "Stack" },
+  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
+] as const;
 
-  /* direction sign: left → negative offset, right → positive offset */
-  const sign = direction === "left" ? -1 : 1;
-  const autoVel = sign * speed;
-
-  /* write transform directly — zero React re-renders */
-  const commit = useCallback(() => {
-    const el = trackRef.current;
-    if (!el || half.current === 0) return;
-
-    /* seamless wrap:
-       left  scrolls offset toward -∞ → reset when it passes -half
-       right scrolls offset toward +∞ → reset when it passes +half
-       For drag in the opposite direction we also need the reverse wraps. */
-    const h = half.current;
-    while (offset.current < -h) offset.current += h;
-    while (offset.current > 0) offset.current -= h;
-
-    el.style.transform = `translateX(${offset.current}px)`;
-  }, []);
-
-  /* rAF loop */
-  const tick = useCallback(() => {
-    if (!dragging.current) {
-      const absV = Math.abs(velocity.current);
-      if (absV > 0.15) {
-        /* momentum phase: decay toward 0 */
-        velocity.current *= 0.93;
-        offset.current += velocity.current;
-      } else {
-        /* auto-scroll phase */
-        velocity.current = 0;
-        offset.current += autoVel;
-      }
-      commit();
-    }
-    rafId.current = requestAnimationFrame(tick);
-  }, [autoVel, commit]);
-
-  /* mount: measure, start loop */
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-
-    const measure = () => {
-      /* 4 copies rendered; loop boundary = 2 copies = scrollWidth / 2 */
-      half.current = el.scrollWidth / 2;
-      /* right-direction starts at -half so it scrolls positively into view */
-      if (direction === "right" && offset.current === 0) {
-        offset.current = -half.current;
-      }
-    };
-    measure();
-
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-
-    rafId.current = requestAnimationFrame(tick);
-    return () => {
-      ro.disconnect();
-      cancelAnimationFrame(rafId.current);
-    };
-  }, [tick, direction]);
-
-  /* pointer helpers */
-  const clientX = (e: MouseEvent | TouchEvent) =>
-    "touches" in e ? e.touches[0].clientX : e.clientX;
-
-  /* handlers attached to the track element */
-  const onPointerDown = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    dragging.current = true;
-    velocity.current = 0;
-    const x = "touches" in e.nativeEvent
-      ? e.nativeEvent.touches[0].clientX
-      : e.nativeEvent.clientX;
-    lastX.current = x;
-    lastTime.current = performance.now();
-    trackRef.current?.classList.add("is-dragging");
-  }, []);
-
-  /* global move / up listeners (so drag works outside the element) */
-  useEffect(() => {
-    const onMove = (e: MouseEvent | TouchEvent) => {
-      if (!dragging.current) return;
-      const x = clientX(e);
-      const dx = x - lastX.current;
-      const now = performance.now();
-      const dt = Math.max(now - lastTime.current, 1);
-
-      /* velocity in px/frame (assuming ~60 fps → 16 ms) */
-      velocity.current = (dx / dt) * 16;
-      offset.current += dx;
-      lastX.current = x;
-      lastTime.current = now;
-      commit();
-    };
-
-    const onUp = () => {
-      if (!dragging.current) return;
-      dragging.current = false;
-      trackRef.current?.classList.remove("is-dragging");
-      /* velocity.current carries the fling; tick() picks it up automatically */
-    };
-
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    window.addEventListener("touchmove", onMove, { passive: true });
-    window.addEventListener("touchend", onUp);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
-      window.removeEventListener("touchmove", onMove);
-      window.removeEventListener("touchend", onUp);
-    };
-  }, [commit]);
-
-  return { trackRef, onPointerDown };
+interface NavbarProps {
+  darkMode: boolean;
+  toggleDark: () => void;
+  active: string;
 }
 
-/* ─── MarqueeRow ─────────────────────────────────────────────────────────── */
-interface MarqueeRowProps {
-  items: { name: string; icon: string }[];
-  direction?: "left" | "right";
-  label: string;
+function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
+  return (
+    <header className="fixed top-4 inset-x-0 z-50 px-4 pointer-events-none">
+      <nav
+        className={`pointer-events-auto mx-auto max-w-3xl flex items-center justify-between
+          gap-2 px-3 py-2 rounded-2xl
+          ${darkMode ? "glass-dark" : "glass-light shadow-lg"}`}
+      >
+        <a
+          href="#home"
+          className={`mono text-xs uppercase tracking-widest px-2 py-1 rounded-lg flex items-center gap-1.5
+            ${darkMode ? "text-violet-300" : "text-violet-600"}`}
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          daven.dev
+        </a>
+
+        <ul className="hidden sm:flex items-center gap-1">
+          {NAV_LINKS.map((l) => (
+            <li key={l.id}>
+              <a
+                href={`#${l.id}`}
+                data-active={active === l.id}
+                className={`nav-pill mono text-[11px] uppercase tracking-widest px-3 py-1.5 rounded-lg
+                  transition-colors duration-200
+                  ${active === l.id
+                    ? darkMode ? "text-white" : "text-slate-900"
+                    : darkMode ? "text-gray-400 hover:text-white" : "text-slate-500 hover:text-slate-900"}`}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <button
+          onClick={toggleDark}
+          aria-label="Toggle theme"
+          className={`p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
+            ${darkMode
+              ? "bg-white/5 border-white/10 hover:bg-white/10"
+              : "bg-white border-slate-200 hover:bg-slate-100"}`}
+        >
+          {darkMode
+            ? <Sun className="w-4 h-4 text-yellow-300" />
+            : <Moon className="w-4 h-4 text-indigo-500" />}
+        </button>
+      </nav>
+    </header>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Stack Matrix — replaces the marquee
+   Periodic-table-inspired bento grid with categorized panels.
+═══════════════════════════════════════════════════════════════════════════ */
+interface TechCellProps {
+  tech: TechItem;
+  darkMode: boolean;
+  index: number;
+}
+
+function TechCell({ tech, darkMode, index }: TechCellProps) {
+  return (
+    <div
+      className={`tech-tile group relative aspect-square rounded-xl flex flex-col items-center justify-center
+        gap-1.5 p-2 cursor-default
+        ${darkMode
+          ? "bg-white/[0.03] border border-white/8 hover:bg-white/[0.06]"
+          : "bg-white border border-slate-200/80 hover:bg-slate-50 shadow-sm"}`}
+      style={{ animationDelay: `${index * 0.02}s` }}
+      title={tech.name}
+    >
+      <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+        <img src={tech.icon} alt={tech.name} className="w-full h-full object-contain" />
+      </div>
+      <span
+        className={`text-[9px] sm:text-[10px] mono uppercase tracking-wider text-center leading-tight
+          ${darkMode ? "text-gray-500 group-hover:text-gray-200" : "text-slate-400 group-hover:text-slate-700"}
+          transition-colors duration-200 line-clamp-1`}
+      >
+        {tech.name}
+      </span>
+    </div>
+  );
+}
+
+interface StackMatrixProps {
   darkMode: boolean;
 }
 
-function MarqueeRow({ items, direction = "left", label, darkMode }: MarqueeRowProps) {
-  /* 4 copies → hook uses scrollWidth / 2 as the wrap boundary */
-  const copies = [...items, ...items, ...items, ...items];
-  const { trackRef, onPointerDown } = useDraggableMarquee(direction);
+function StackMatrix({ darkMode }: StackMatrixProps) {
+  const categories = useMemo(() => getTechCategories(darkMode), [darkMode]);
+  const totalCount = categories.reduce((acc, c) => acc + c.items.length, 0);
 
   return (
-    <div className="space-y-2">
-      <p className={`text-center text-xs uppercase tracking-widest font-medium mono mb-3
-        ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
-        {label}
-      </p>
+    <section
+      id="stack"
+      className={`relative px-6 py-24 md:py-32 overflow-hidden scroll-mt-20`}
+    >
+      <div className="max-w-6xl mx-auto relative z-10">
 
-      <div className="relative overflow-hidden">
-        {/* left fade */}
-        <div className={`pointer-events-none absolute inset-y-0 left-0 w-16 z-10
-          ${darkMode
-            ? "bg-gradient-to-r from-gray-950 to-transparent"
-            : "bg-gradient-to-r from-slate-50 to-transparent"}`} />
-        {/* right fade */}
-        <div className={`pointer-events-none absolute inset-y-0 right-0 w-16 z-10
-          ${darkMode
-            ? "bg-gradient-to-l from-gray-950 to-transparent"
-            : "bg-gradient-to-l from-slate-50 to-transparent"}`} />
+        {/* heading */}
+        <div className="reveal mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <span className={`mono text-[11px] uppercase tracking-[0.2em]
+              ${darkMode ? "text-violet-400" : "text-violet-600"}`}>
+              02 — toolkit
+            </span>
+            <h2 className={`mt-2 text-4xl md:text-5xl font-extrabold tracking-tight
+              ${darkMode ? "text-white" : "text-slate-900"}`}>
+              The Stack <span className="serif font-normal opacity-70">Matrix</span>
+            </h2>
+          </div>
+          <p className={`max-w-md text-sm md:text-base
+            ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+            <span className={darkMode ? "text-gray-200" : "text-slate-800"}>{totalCount} technologies</span> I
+            reach for, organized by where they live in the build.
+          </p>
+        </div>
 
-        {/* track */}
-        <div
-          ref={trackRef}
-          className="marquee-track flex gap-3 w-max py-1"
-          onMouseDown={onPointerDown}
-          onTouchStart={onPointerDown}
-        >
-          {copies.map((tech, i) => (
+        {/* matrix panels */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+          {categories.map((cat, ci) => (
             <div
-              key={i}
-              className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl whitespace-nowrap
-                select-none transition-colors duration-200
+              key={cat.label}
+              className={`reveal relative rounded-2xl p-5 md:p-6
+                ${ci === 0 ? "lg:col-span-2" : "lg:col-span-3"}
                 ${darkMode
-                  ? "bg-white/4 border border-white/8 hover:bg-white/10 hover:border-violet-500/40"
-                  : "bg-white border border-slate-200 hover:border-violet-400 shadow-sm"}`}
+                  ? "bg-gradient-to-br from-white/[0.04] to-white/[0.01] border border-white/8"
+                  : "bg-gradient-to-br from-white to-slate-50/60 border border-slate-200 shadow-sm"}`}
             >
-              <img src={tech.icon} alt={tech.name} className="w-5 h-5 flex-shrink-0" />
-              <span className={`text-sm font-medium ${darkMode ? "text-gray-200" : "text-slate-700"}`}>
-                {tech.name}
-              </span>
+              {/* panel header */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5">
+                  <span className={`mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded
+                    ${darkMode
+                      ? "bg-violet-500/15 text-violet-300 border border-violet-500/25"
+                      : "bg-violet-100 text-violet-700 border border-violet-200"}`}>
+                    {String(ci + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className={`text-base md:text-lg font-bold
+                    ${darkMode ? "text-white" : "text-slate-900"}`}>
+                    {cat.label}
+                  </h3>
+                </div>
+                <span className={`mono text-xs ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                  {cat.items.length}
+                </span>
+              </div>
+
+              {/* tile grid */}
+              <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                {cat.items.map((tech, i) => (
+                  <TechCell key={tech.name} tech={tech} darkMode={darkMode} index={i} />
+                ))}
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* ambient orb */}
+      <div className={`pointer-events-none absolute top-1/2 -right-32 w-96 h-96 rounded-full blur-3xl opacity-10
+        ${darkMode ? "bg-violet-500" : "bg-violet-300"}`} />
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Hero
+═══════════════════════════════════════════════════════════════════════════ */
+interface HeroProps {
+  darkMode: boolean;
+  socials: ReturnType<typeof getSocials>;
+}
+
+const HERO_STATS = [
+  { value: "3+", label: "Years coding" },
+  { value: "10+", label: "Projects completed" },
+  { value: "∞", label: "Food consumed" },
+];
+
+function Hero({ darkMode, socials }: HeroProps) {
+  const accent = darkMode
+    ? "from-violet-400 via-fuchsia-300 to-cyan-300"
+    : "from-violet-600 via-fuchsia-500 to-cyan-500";
+
+  return (
+    <section
+      id="home"
+      className={`relative min-h-screen flex items-center px-6 pt-28 pb-20 overflow-hidden
+        ${darkMode ? "grid-lines" : "grid-lines-light"}`}
+    >
+      {/* orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className={`absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-3xl opacity-20
+          ${darkMode ? "bg-violet-600" : "bg-violet-400"}`} />
+        <div className={`absolute -bottom-24 -right-24 w-[400px] h-[400px] rounded-full blur-3xl opacity-15
+          ${darkMode ? "bg-cyan-500" : "bg-cyan-400"}`} />
+      </div>
+
+      <div className="relative z-10 w-full max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+
+          {/* right — text */}
+          <div className="lg:col-span-7 order-2 lg:order-2">
+            {/* status */}
+            <div className="flex items-center gap-2 mb-6 fade-up fade-up-1">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 blink-dot" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+              </span>
+              <span className={`mono text-[11px] uppercase tracking-[0.22em]
+                ${darkMode ? "text-emerald-300" : "text-emerald-700"}`}>
+                Available for work · Philippines
+              </span>
+            </div>
+
+            {/* eyebrow */}
+            <p className={`mono text-xs uppercase tracking-widest mb-3 fade-up fade-up-2
+              ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+              Hi, I'm Daven —
+            </p>
+
+            {/* headline */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-[0.95] tracking-tight mb-6 fade-up fade-up-2">
+              <span className={darkMode ? "text-white" : "text-slate-900"}>
+                I build{" "}
+              </span>
+              <span className={`bg-clip-text text-transparent bg-gradient-to-r ${accent} shimmer-text`}>
+                full-stack
+              </span>
+              <br />
+              <span className={darkMode ? "text-white" : "text-slate-900"}>web things that </span>
+              <span className="serif font-normal opacity-90">don't break.</span>
+            </h1>
+
+            <p className={`text-base md:text-lg max-w-xl mb-8 leading-relaxed fade-up fade-up-3
+              ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+              Laravel and PHP on the back, Vue and React on the front. I care about
+              database design and architecture so the systems hold up when things get serious.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3 mb-10 fade-up fade-up-4">
+              <a
+                href="#projects"
+                className={`group inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm
+                  transition-all duration-200 hover:scale-[1.02]
+                  ${darkMode
+                    ? "bg-white text-slate-900 hover:bg-gray-100"
+                    : "bg-slate-900 text-white hover:bg-slate-800"}`}
+              >
+                See my work
+                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+              </a>
+              <a
+                href="#contact"
+                className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border
+                  transition-all duration-200 hover:scale-[1.02]
+                  ${darkMode
+                    ? "border-white/15 text-gray-200 hover:bg-white/5"
+                    : "border-slate-300 text-slate-700 hover:bg-white"}`}
+              >
+                Get in touch
+              </a>
+            </div>
+
+            {/* socials */}
+            <div className="flex items-center gap-3 fade-up fade-up-5">
+              <span className={`mono text-[10px] uppercase tracking-widest
+                ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+                find me
+              </span>
+              <span className={`h-px w-8 ${darkMode ? "bg-white/10" : "bg-slate-300"}`} />
+              <div className="flex gap-2">
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className={`p-2.5 rounded-xl border transition-all duration-200 hover:scale-110
+                      ${darkMode
+                        ? "bg-white/5 border-white/10 hover:bg-white/12 hover:border-violet-500/40"
+                        : "bg-white border-slate-200 hover:bg-violet-50 hover:border-violet-300"}`}
+                  >
+                    {s.isImg && s.icon
+                      ? <img src={s.icon} alt={s.label} className="w-4 h-4" />
+                      : s.component ? <s.component /> : null}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* left — portrait + stats */}
+          <div className="lg:col-span-5 order-1 lg:order-1">
+            <Parallax speed={0.05} className="relative max-w-sm mx-auto lg:max-w-none fade-up fade-up-1">
+              {/* corner decoration */}
+              <div className={`absolute -top-3 -left-3 w-12 h-12 border-t-2 border-l-2 rounded-tl-xl
+                ${darkMode ? "border-violet-400/60" : "border-violet-500/60"}`} />
+              <div className={`absolute -bottom-3 -right-3 w-12 h-12 border-b-2 border-r-2 rounded-br-xl
+                ${darkMode ? "border-cyan-400/60" : "border-cyan-500/60"}`} />
+
+              {/* portrait */}
+              <div className={`relative rounded-2xl overflow-hidden
+                ${darkMode ? "ring-1 ring-white/10" : "ring-1 ring-slate-200"}
+                shadow-2xl`}>
+                <img
+                  src={DeveloperProfile}
+                  alt="Daven Alajid"
+                  className="w-full aspect-[4/5] object-cover object-top"
+                />
+                {/* tag overlay */}
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
+                  <span className={`mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md
+                    backdrop-blur-md
+                    ${darkMode
+                      ? "bg-black/40 text-white border border-white/15"
+                      : "bg-white/70 text-slate-900 border border-white/60"}`}>
+                    Fullstack Dev
+                  </span>
+                  <span className={`mono text-[10px] px-2.5 py-1 rounded-md backdrop-blur-md
+                    ${darkMode
+                      ? "bg-black/40 text-gray-300 border border-white/15"
+                      : "bg-white/70 text-slate-600 border border-white/60"}`}>
+                    v.{new Date().getFullYear()}
+                  </span>
+                </div>
+              </div>
+
+              {/* stats strip */}
+              <div className={`mt-4 grid grid-cols-3 rounded-xl overflow-hidden
+                ${darkMode
+                  ? "bg-white/[0.03] border border-white/8"
+                  : "bg-white border border-slate-200 shadow-sm"}`}>
+                {HERO_STATS.map((s, i) => (
+                  <div
+                    key={s.label}
+                    className={`px-3 py-3 text-center
+                      ${i < HERO_STATS.length - 1
+                        ? darkMode ? "border-r border-white/8" : "border-r border-slate-200"
+                        : ""}`}
+                  >
+                    <div className={`text-lg md:text-xl font-bold
+                      ${darkMode ? "text-white" : "text-slate-900"}`}>
+                      {s.value}
+                    </div>
+                    <div className={`mono text-[9px] uppercase tracking-wider mt-0.5
+                      ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                      {s.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Parallax>
+          </div>
+        </div>
+
+        {/* scroll cue */}
+        <div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 fade-up fade-up-5">
+          <span className={`mono text-[10px] uppercase tracking-widest
+            ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+            scroll
+          </span>
+          <div className={`w-px h-10 bg-gradient-to-b
+            ${darkMode ? "from-white/30 to-transparent" : "from-slate-400 to-transparent"}`} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Splash screen — shows once on first paint, fades itself out via CSS.
+═══════════════════════════════════════════════════════════════════════════ */
+function Splash({ darkMode }: { darkMode: boolean }) {
+  const [mounted, setMounted] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(false), 2200);
+    return () => clearTimeout(t);
+  }, []);
+  if (!mounted) return null;
+  return (
+    <div
+      className={`splash ${darkMode ? "bg-gray-950" : "bg-slate-50"}`}
+      aria-hidden="true"
+    >
+      <div className="relative">
+        <span className="splash-mark">daven.</span>
+        <span
+          className={`splash-rule ${darkMode ? "text-violet-400" : "text-violet-500"}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   useScrollReveal — adds .is-visible to anything tagged .reveal as it enters.
+═══════════════════════════════════════════════════════════════════════════ */
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.08 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Parallax wrapper — translates child slightly as it enters/leaves the viewport.
+═══════════════════════════════════════════════════════════════════════════ */
+interface ParallaxProps {
+  children: React.ReactNode;
+  speed?: number;
+  className?: string;
+}
+function Parallax({ children, speed = 0.08, className = "" }: ParallaxProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+      el.style.transform = `translate3d(0, ${center * -speed}px, 0)`;
+      raf = 0;
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [speed]);
+  return (
+    <div ref={ref} className={className} style={{ willChange: "transform" }}>
+      {children}
     </div>
   );
 }
@@ -280,6 +671,7 @@ function MarqueeRow({ items, direction = "left", label, darkMode }: MarqueeRowPr
 ═══════════════════════════════════════════════════════════════════════════ */
 export default function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const [activeSection, setActiveSection] = useState<string>("home");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
@@ -290,203 +682,103 @@ export default function App() {
     if (!document.getElementById(id)) {
       const s = document.createElement("style");
       s.id = id;
-      s.textContent = MARQUEE_CSS;
+      s.textContent = PORTFOLIO_CSS;
       document.head.appendChild(s);
     }
   }, []);
 
-  const techCategories = useMemo(() => getTechCategories(darkMode), [darkMode]);
+  /* scroll-spy for navbar */
+  useEffect(() => {
+    const ids = NAV_LINKS.map((l) => l.id);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActiveSection(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const socials = useMemo(() => getSocials(darkMode), [darkMode]);
 
-  const accent = darkMode
-    ? "from-violet-500 via-fuchsia-400 to-cyan-400"
-    : "from-violet-600 via-fuchsia-500 to-cyan-500";
+  useScrollReveal();
 
   return (
     <div className={`min-h-screen relative noise-bg transition-colors duration-500
       ${darkMode ? "bg-gray-950 text-gray-100" : "bg-slate-50 text-gray-900"}`}>
 
-      {/* ── theme toggle ───────────────────────────────────────────────── */}
-      <button
-        onClick={() => setDarkMode(!darkMode)}
-        aria-label="Toggle theme"
-        className={`fixed top-5 right-5 z-50 p-2.5 rounded-full shadow-xl border
-          transition-all duration-200 hover:scale-110 cursor-pointer
-          ${darkMode
-            ? "bg-white/8 border-white/10 backdrop-blur-md hover:bg-white/15"
-            : "bg-white border-slate-200 hover:bg-slate-100"}`}
+      <Splash darkMode={darkMode} />
+
+      <Navbar
+        darkMode={darkMode}
+        toggleDark={() => setDarkMode(!darkMode)}
+        active={activeSection}
+      />
+
+      <Hero darkMode={darkMode} socials={socials} />
+
+      <StackMatrix darkMode={darkMode} />
+
+      <div id="projects" className="scroll-mt-20">
+        <ProjectsSection darkMode={darkMode} />
+      </div>
+
+      {/* ── footer / contact ─────────────────────────────────────────────── */}
+      <footer
+        id="contact"
+        className={`relative scroll-mt-20 border-t
+          ${darkMode ? "border-white/6" : "border-slate-200"}`}
       >
-        {darkMode
-          ? <Sun className="w-5 h-5 text-yellow-300" />
-          : <Moon className="w-5 h-5 text-indigo-500" />}
-      </button>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          HERO
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className={`relative overflow-hidden px-6 py-10
-        ${darkMode ? "grid-lines" : ""}`}>
-
-        {/* orbs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className={`absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20
-            ${darkMode ? "bg-violet-600" : "bg-violet-400"}`} />
-          <div className={`absolute -bottom-24 -right-24 w-80 h-80 rounded-full blur-3xl opacity-15
-            ${darkMode ? "bg-cyan-500" : "bg-cyan-400"}`} />
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto">
-
-          {/* badge */}
-          <div className="flex justify-center mb-6 fade-up fade-up-1">
-            <span className={`mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full border
-              flex items-center gap-1.5
-              ${darkMode
-                ? "border-violet-500/30 text-violet-300 bg-violet-500/10"
-                : "border-violet-400/40 text-violet-600 bg-violet-50"}`}>
-              <Circle className="w-2 h-2 fill-current" />
-              Available for work
+        <div className="max-w-5xl mx-auto px-6 py-20">
+          <div className="reveal text-center mb-12">
+            <span className={`mono text-[11px] uppercase tracking-[0.22em]
+              ${darkMode ? "text-violet-400" : "text-violet-600"}`}>
+              04 — contact
             </span>
-          </div>
+            <h2 className={`mt-3 text-4xl md:text-6xl font-extrabold tracking-tight
+              ${darkMode ? "text-white" : "text-slate-900"}`}>
+              Let's build <span className="serif font-normal opacity-90">something.</span>
+            </h2>
+            <p className={`mt-4 text-base md:text-lg max-w-md mx-auto
+              ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+              Open to freelance, part-time, and side projects worth losing sleep over.
+            </p>
 
-          {/* headline */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-center
-            leading-none tracking-tight mb-6 fade-up fade-up-2">
-            Hi, I'm{" "}
-            <span className={`bg-clip-text text-transparent bg-gradient-to-r ${accent}`}>
-              Daven
-            </span>
-          </h1>
-
-          <p className={`text-center text-lg md:text-xl max-w-xl mx-auto mb-12 fade-up fade-up-3
-            ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
-            Building things for the web — clean on the outside, solid on the inside.
-          </p>
-
-          {/* profile card */}
-          <div className={`fade-up fade-up-4 rounded-2xl p-6 md:p-8
-            flex flex-col sm:flex-row items-center gap-6 glow-pulse
-            ${darkMode ? "glass-dark" : "glass-light shadow-xl"}`}>
-
-            {/* avatar */}
-            <div className={`relative flex-shrink-0 w-48 h-48 md:w-64 md:h-64 rounded-3xl overflow-hidden
-  ring-2 ${darkMode ? "ring-violet-500/40" : "ring-violet-400/50"}
-  shadow-2xl`}>
-
-              <img
-                src={DeveloperProfile}
-                alt="Daven Alajid"
-                className="w-full h-full object-cover object-top"
-              />
-            </div>
-            {/* bio */}
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className={`text-xl md:text-2xl font-bold mb-1
-                ${darkMode ? "text-white" : "text-slate-900"}`}>
-                Fullstack Developer
-              </h3>
-              <p className={`text-sm md:text-base leading-relaxed mb-4
-                ${darkMode ? "text-gray-400" : "text-slate-600"}`}>
-                I build full-stack web applications using Laravel and PHP on the backend,
-                with Vue.js and React.js on the frontend. I put a lot of care into database
-                and architectural design, making sure the systems I build don't fall apart
-                when things get serious.
-              </p>
-
-              {/* socials */}
-              <div className="flex justify-center sm:justify-start gap-2">
-                {socials.map((s) => (
-                  <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className={`p-2.5 rounded-xl border transition-all duration-200 hover:scale-110
-                      ${darkMode
-                        ? "bg-white/5 border-white/10 hover:bg-white/12 hover:border-violet-500/40"
-                        : "bg-slate-100 border-slate-200 hover:bg-violet-50 hover:border-violet-300"}`}>
-                    {s.isImg && s.icon
-                      ? <img src={s.icon} alt={s.label} className="w-5 h-5" />
-                      : s.component ? <s.component /> : null}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* desktop accent pills */}
-            <div className="hidden lg:flex flex-col items-end gap-2 mono text-xs">
-              {["laravel", "react", "typescript", "tailwindcss", "ui/shadcn"].map((t) => (
-                <span key={t} className={`px-3 py-1 rounded-full
-                  ${darkMode ? "bg-white/5 text-gray-500" : "bg-slate-100 text-slate-400"}`}>
-                  ./{t}
-                </span>
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+              {socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mono text-xs uppercase tracking-widest px-4 py-2.5 rounded-xl border
+                    transition-all duration-200 hover:scale-105 flex items-center gap-2
+                    ${darkMode
+                      ? "bg-white/5 border-white/10 text-gray-200 hover:bg-white/10 hover:border-violet-400/40"
+                      : "bg-white border-slate-200 text-slate-700 hover:bg-violet-50 hover:border-violet-300"}`}
+                >
+                  {s.isImg && s.icon
+                    ? <img src={s.icon} alt="" className="w-4 h-4" />
+                    : s.component ? <s.component /> : null}
+                  {s.label}
+                </a>
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          TECH STACK
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className={`py-16 md:py-20 relative overflow-hidden
-        ${darkMode ? "" : "bg-white/50"}`}>
-
-        <div className={`absolute top-0 inset-x-0 h-px
-          ${darkMode ? "bg-white/6" : "bg-slate-200"}`} />
-
-        <div className="max-w-6xl mx-auto px-6 mb-10">
-          <div className="flex items-center gap-4 justify-center">
-            <div className={`h-px flex-1 max-w-[80px] ${darkMode ? "bg-white/10" : "bg-slate-200"}`} />
-            <h2 className={`text-2xl md:text-3xl font-bold tracking-tight
-              ${darkMode ? "text-white" : "text-slate-900"}`}>
-              Tech Stack
-            </h2>
-            <div className={`h-px flex-1 max-w-[80px] ${darkMode ? "bg-white/10" : "bg-slate-200"}`} />
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {techCategories.map((cat, ci) => (
-            <MarqueeRow
-              key={ci}
-              items={cat.items}
-              direction={ci % 2 === 0 ? "left" : "right"}
-              label={cat.label}
-              darkMode={darkMode}
-            />
-          ))}
-        </div>
-
-        <div className={`absolute bottom-0 inset-x-0 h-px
-          ${darkMode ? "bg-white/6" : "bg-slate-200"}`} />
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          PROJECTS
-      ══════════════════════════════════════════════════════════════════ */}
-      <ProjectsSection darkMode={darkMode} />
-
-      {/* ── footer ─────────────────────────────────────────────────────── */}
-      <footer className={`border-t py-8 ${darkMode ? "border-white/6" : "border-slate-200"}`}>
-        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-
-          <span className={`mono text-xs ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
-            © {new Date().getFullYear()} Daven Alajid. All rights reserved.
-          </span>
-
-          <div className="flex items-center gap-4">
-            {socials.map((s, i) => (
-              <span key={s.label} className="flex items-center gap-4">
-                <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.label}
-                  className={`mono text-xs transition-colors duration-200
-                    ${darkMode
-                      ? "text-gray-500 hover:text-violet-400"
-                      : "text-slate-400 hover:text-violet-600"}`}>
-                  {s.label}
-                </a>
-                {i < socials.length - 1 && (
-                  <span className={`text-xs ${darkMode ? "text-gray-700" : "text-slate-300"}`}>·</span>
-                )}
-              </span>
-            ))}
+          <div className={`pt-8 flex flex-col sm:flex-row items-center justify-between gap-3
+            border-t ${darkMode ? "border-white/6" : "border-slate-200"}`}>
+            <span className={`mono text-[10px] uppercase tracking-widest
+              ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+              © {new Date().getFullYear()} Daven Alajid. All Rights Reserved.
+            </span>
           </div>
         </div>
       </footer>
