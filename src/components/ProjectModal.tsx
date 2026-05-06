@@ -106,7 +106,7 @@ export default function ProjectModal({
                                 className="w-full h-full object-contain animate-[fadeUp_0.4s_ease_both]"
                             />
                         ) : (
-                            <div className="text-sm text-gray-500">No screenshots available</div>
+                            <div className="text-sm text-stone-500">No screenshots available</div>
                         )}
 
                         {hasMultiple && (
@@ -200,7 +200,7 @@ export default function ProjectModal({
                                 aria-label="Previous project"
                                 className={`p-1.5 rounded-md cursor-pointer transition-colors
                                     ${darkMode
-                                        ? "text-gray-400 hover:bg-white/8 hover:text-white"
+                                        ? "text-stone-400 hover:bg-white/8 hover:text-white"
                                         : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"}`}
                             >
                                 <ChevronLeft className="w-4 h-4" />
@@ -210,7 +210,7 @@ export default function ProjectModal({
                                 aria-label="Next project"
                                 className={`p-1.5 rounded-md cursor-pointer transition-colors
                                     ${darkMode
-                                        ? "text-gray-400 hover:bg-white/8 hover:text-white"
+                                        ? "text-stone-400 hover:bg-white/8 hover:text-white"
                                         : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"}`}
                             >
                                 <ChevronRight className="w-4 h-4" />
@@ -240,7 +240,7 @@ export default function ProjectModal({
 
                         <p
                             className={`text-sm md:text-base leading-relaxed
-                                ${darkMode ? "text-gray-300" : "text-slate-600"}`}
+                                ${darkMode ? "text-stone-300" : "text-slate-600"}`}
                         >
                             {selectedProject.description}
                         </p>
@@ -249,7 +249,7 @@ export default function ProjectModal({
 
                         <div>
                             <h4 className={`mono text-[10px] uppercase tracking-[0.22em] mb-3
-                                ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                                ${darkMode ? "text-stone-500" : "text-slate-400"}`}>
                                 Built with
                             </h4>
                             <div className="flex flex-wrap gap-1.5">
@@ -270,7 +270,7 @@ export default function ProjectModal({
                                 <div className={`h-px ${darkMode ? "bg-white/8" : "bg-slate-100"}`} />
                                 <div>
                                     <h4 className={`mono text-[10px] uppercase tracking-[0.22em] mb-3
-                                        ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                                        ${darkMode ? "text-stone-500" : "text-slate-400"}`}>
                                         Links
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
@@ -286,7 +286,7 @@ export default function ProjectModal({
                                                         transition-all duration-200 hover:scale-[1.03]
                                                         ${isGithub
                                                             ? darkMode
-                                                                ? "bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10"
+                                                                ? "bg-white/5 border border-white/10 text-stone-200 hover:bg-white/10"
                                                                 : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
                                                             : darkMode
                                                                 ? "bg-orange-500 text-black hover:bg-orange-400"
@@ -311,7 +311,7 @@ export default function ProjectModal({
                     {/* keyboard hints footer */}
                     <div className={`mono text-[10px] uppercase tracking-widest px-6 py-3 flex flex-wrap gap-x-4 gap-y-1
                         ${darkMode
-                            ? "bg-white/[0.02] border-t border-white/8 text-gray-500"
+                            ? "bg-white/[0.02] border-t border-white/8 text-stone-500"
                             : "bg-slate-50 border-t border-slate-200 text-slate-400"}`}>
                         <span><kbd className="font-bold">esc</kbd> close</span>
                         <span><kbd className="font-bold">←/→</kbd> gallery</span>

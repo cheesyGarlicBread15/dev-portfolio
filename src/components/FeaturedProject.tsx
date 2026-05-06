@@ -32,7 +32,7 @@ export default function FeaturedProject({
                 <div className="lg:col-span-7 relative overflow-hidden">
                     <div
                         className={`relative h-72 sm:h-96 lg:h-[460px] flex items-center justify-center overflow-hidden
-                            ${darkMode ? "bg-gray-900/40" : "bg-slate-100/80"}`}
+                            ${darkMode ? "bg-stone-900/40" : "bg-slate-100/80"}`}
                     >
                         {project.image ? (
                             <img
@@ -41,7 +41,7 @@ export default function FeaturedProject({
                                 className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
                             />
                         ) : (
-                            <span className="text-sm text-gray-500">No preview</span>
+                            <span className="text-sm text-stone-500">No preview</span>
                         )}
 
                         {/* dark gradient bottom on image */}
@@ -76,7 +76,7 @@ export default function FeaturedProject({
                             <div className={`h-px flex-1 ${darkMode ? "bg-white/10" : "bg-slate-200"}`} />
                             <span
                                 className={`mono text-[10px] uppercase tracking-widest
-                                    ${darkMode ? "text-gray-500" : "text-slate-400"}`}
+                                    ${darkMode ? "text-stone-500" : "text-slate-400"}`}
                             >
                                 Featured Work
                             </span>
@@ -91,7 +91,7 @@ export default function FeaturedProject({
 
                         <p
                             className={`text-sm md:text-base leading-relaxed mb-6
-                                ${darkMode ? "text-gray-400" : "text-slate-600"}`}
+                                ${darkMode ? "text-stone-400" : "text-slate-600"}`}
                         >
                             {project.description}
                         </p>
@@ -121,10 +121,10 @@ export default function FeaturedProject({
                                     transition-all duration-200 hover:scale-[1.03]
                                     ${l.type === "GitHub"
                                         ? darkMode
-                                            ? "bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10"
+                                            ? "bg-white/5 border border-white/10 text-stone-200 hover:bg-white/10"
                                             : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
                                         : darkMode
-                                            ? "bg-white text-slate-900 hover:bg-gray-100"
+                                            ? "bg-white text-slate-900 hover:bg-stone-100"
                                             : "bg-slate-900 text-white hover:bg-slate-800"
                                     }`}
                             >
@@ -138,7 +138,7 @@ export default function FeaturedProject({
                         ))}
 
                         <span className={`mono text-[10px] uppercase tracking-widest ml-auto
-                            ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+                            ${darkMode ? "text-stone-600" : "text-slate-400"}`}>
                             Click to view →
                         </span>
                     </div>

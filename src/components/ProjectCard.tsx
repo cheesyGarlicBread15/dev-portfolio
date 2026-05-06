@@ -32,7 +32,7 @@ export default function ProjectCard({
             {/* image with overlay */}
             <div
                 className={`relative w-full aspect-[16/10] overflow-hidden flex-shrink-0
-                    ${darkMode ? "bg-gray-900/40" : "bg-slate-100"}`}
+                    ${darkMode ? "bg-stone-900/40" : "bg-slate-100"}`}
             >
                 {project.image ? (
                     <img
@@ -41,7 +41,7 @@ export default function ProjectCard({
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                     />
                 ) : (
-                    <span className="absolute inset-0 flex items-center justify-center text-sm text-gray-500">
+                    <span className="absolute inset-0 flex items-center justify-center text-sm text-stone-500">
                         No preview
                     </span>
                 )}
@@ -50,7 +50,7 @@ export default function ProjectCard({
                 <div
                     className={`absolute inset-0 transition-opacity duration-300
                         ${darkMode
-                            ? "bg-gradient-to-t from-gray-950/70 via-gray-950/10 to-transparent"
+                            ? "bg-gradient-to-t from-stone-950/70 via-stone-950/10 to-transparent"
                             : "bg-gradient-to-t from-white/40 via-transparent to-transparent"}`}
                 />
 
@@ -90,7 +90,7 @@ export default function ProjectCard({
 
                 <p
                     className={`text-xs md:text-sm leading-relaxed line-clamp-2 flex-1
-                        ${darkMode ? "text-gray-400" : "text-slate-500"}`}
+                        ${darkMode ? "text-stone-400" : "text-slate-500"}`}
                 >
                     {project.description}
                 </p>
@@ -109,7 +109,7 @@ export default function ProjectCard({
                     {project.tech.length > 4 && (
                         <span
                             className={`mono text-[10px] px-2 py-0.5 rounded-md self-center
-                                ${darkMode ? "text-gray-500" : "text-slate-400"}`}
+                                ${darkMode ? "text-stone-500" : "text-slate-400"}`}
                         >
                             +{project.tech.length - 4}
                         </span>

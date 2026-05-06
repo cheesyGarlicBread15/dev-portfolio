@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Moon, Sun, ArrowDown, Terminal } from "lucide-react";
+import { createPortal } from "react-dom";
+import { Moon, Sun, ArrowDown, Terminal, Menu, X } from "lucide-react";
 
 import DeveloperProfile from "@/assets/profiles/profile-barong.jpg";
 
@@ -56,7 +57,7 @@ code, .mono { font-family: 'DM Mono', monospace; }
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   opacity: 0.6;
 }
 
@@ -172,6 +173,13 @@ code, .mono { font-family: 'DM Mono', monospace; }
   to { transform: translateX(100%); }
 }
 
+/* mobile menu drop */
+@keyframes menu-drop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.menu-drop { animation: menu-drop 0.22s cubic-bezier(0.22, 1, 0.36, 1) both; transform-origin: top right; }
+
 /* nav active pill */
 .nav-pill { position: relative; }
 .nav-pill[data-active="true"]::before {
@@ -204,6 +212,27 @@ interface NavbarProps {
 }
 
 function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 640) setMenuOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <header className="fixed top-4 inset-x-0 z-50 px-4 pointer-events-none">
       <nav
@@ -213,11 +242,12 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
       >
         <a
           href="#home"
+          onClick={closeMenu}
           className={`mono text-xs uppercase tracking-widest px-2 py-1 rounded-lg flex items-center gap-1.5
             ${darkMode ? "text-orange-300" : "text-orange-600"}`}
         >
           <Terminal className="w-3.5 h-3.5" />
-          <span>daven<span className={darkMode ? "text-orange-400" : "text-orange-500"}>.</span>dev</span>
+          <span>garlicbread<span className={darkMode ? "text-orange-400" : "text-orange-500"}>.</span>space</span>
         </a>
 
         <ul className="hidden sm:flex items-center gap-1">
@@ -230,7 +260,7 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
                   transition-colors duration-200
                   ${active === l.id
                     ? darkMode ? "text-white" : "text-slate-900"
-                    : darkMode ? "text-gray-400 hover:text-white" : "text-slate-500 hover:text-slate-900"}`}
+                    : darkMode ? "text-stone-400 hover:text-white" : "text-slate-500 hover:text-slate-900"}`}
               >
                 {l.label}
               </a>
@@ -238,19 +268,65 @@ function Navbar({ darkMode, toggleDark, active }: NavbarProps) {
           ))}
         </ul>
 
-        <button
-          onClick={toggleDark}
-          aria-label="Toggle theme"
-          className={`p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
-            ${darkMode
-              ? "bg-white/5 border-white/10 hover:bg-white/10"
-              : "bg-white border-slate-200 hover:bg-slate-100"}`}
-        >
-          {darkMode
-            ? <Sun className="w-4 h-4 text-yellow-300" />
-            : <Moon className="w-4 h-4 text-orange-500" />}
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={toggleDark}
+            aria-label="Toggle theme"
+            className={`p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
+              ${darkMode
+                ? "bg-white/5 border-white/10 hover:bg-white/10"
+                : "bg-white border-slate-200 hover:bg-slate-100"}`}
+          >
+            {darkMode
+              ? <Sun className="w-4 h-4 text-yellow-300" />
+              : <Moon className="w-4 h-4 text-orange-500" />}
+          </button>
+
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className={`sm:hidden p-2 rounded-xl border transition-all duration-200 hover:scale-105 cursor-pointer
+              ${darkMode
+                ? "bg-white/5 border-white/10 hover:bg-white/10 text-stone-200"
+                : "bg-white border-slate-200 hover:bg-slate-100 text-slate-700"}`}
+          >
+            {menuOpen
+              ? <X className="w-4 h-4" />
+              : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
       </nav>
+
+      {menuOpen && (
+        <div
+          className={`menu-drop sm:hidden pointer-events-auto mx-auto max-w-3xl mt-2 rounded-2xl overflow-hidden
+            ${darkMode ? "glass-dark" : "glass-light shadow-lg"}`}
+        >
+          <ul className="flex flex-col py-2">
+            {NAV_LINKS.map((l) => (
+              <li key={l.id}>
+                <a
+                  href={`#${l.id}`}
+                  onClick={closeMenu}
+                  className={`flex items-center justify-between mono text-xs uppercase tracking-widest
+                    px-5 py-3 transition-colors duration-150
+                    ${active === l.id
+                      ? darkMode
+                        ? "text-orange-300 bg-white/5"
+                        : "text-orange-600 bg-orange-50/60"
+                      : darkMode
+                        ? "text-stone-300 hover:bg-white/5"
+                        : "text-slate-600 hover:bg-slate-100/60"}`}
+                >
+                  <span>{l.label}</span>
+                  <span className="opacity-50">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </header>
   );
 }
@@ -281,7 +357,7 @@ function TechCell({ tech, darkMode, index }: TechCellProps) {
       </div>
       <span
         className={`text-[9px] sm:text-[10px] mono uppercase tracking-wider text-center leading-tight
-          ${darkMode ? "text-gray-500 group-hover:text-gray-200" : "text-slate-400 group-hover:text-slate-700"}
+          ${darkMode ? "text-stone-500 group-hover:text-stone-200" : "text-slate-400 group-hover:text-slate-700"}
           transition-colors duration-200 line-clamp-1`}
       >
         {tech.name}
@@ -318,8 +394,8 @@ function StackMatrix({ darkMode }: StackMatrixProps) {
             </h2>
           </div>
           <p className={`max-w-md text-sm md:text-base
-            ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
-            <span className={darkMode ? "text-gray-200" : "text-slate-800"}>{totalCount} technologies</span> I
+            ${darkMode ? "text-stone-400" : "text-slate-500"}`}>
+            <span className={darkMode ? "text-stone-200" : "text-slate-800"}>{totalCount} technologies</span> I
             reach for, organized by where they live in the build.
           </p>
         </div>
@@ -349,7 +425,7 @@ function StackMatrix({ darkMode }: StackMatrixProps) {
                     {cat.label}
                   </h3>
                 </div>
-                <span className={`mono text-xs ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                <span className={`mono text-xs ${darkMode ? "text-stone-500" : "text-slate-400"}`}>
                   {cat.items.length}
                 </span>
               </div>
@@ -364,10 +440,6 @@ function StackMatrix({ darkMode }: StackMatrixProps) {
           ))}
         </div>
       </div>
-
-      {/* ambient orb */}
-      <div className={`pointer-events-none absolute top-1/2 -right-32 w-96 h-96 rounded-full blur-3xl opacity-10
-        ${darkMode ? "bg-orange-500" : "bg-orange-300"}`} />
     </section>
   );
 }
@@ -397,14 +469,6 @@ function Hero({ darkMode, socials }: HeroProps) {
       className={`relative min-h-screen flex items-center px-6 pt-28 pb-20 overflow-hidden
         ${darkMode ? "grid-lines" : "grid-lines-light"}`}
     >
-      {/* orbs */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className={`absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-3xl opacity-20
-          ${darkMode ? "bg-orange-600" : "bg-orange-400"}`} />
-        <div className={`absolute -bottom-24 -right-24 w-[400px] h-[400px] rounded-full blur-3xl opacity-15
-          ${darkMode ? "bg-red-500" : "bg-red-400"}`} />
-      </div>
-
       <div className="relative z-10 w-full max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
@@ -424,7 +488,7 @@ function Hero({ darkMode, socials }: HeroProps) {
 
             {/* eyebrow */}
             <p className={`mono text-xs uppercase tracking-widest mb-3 fade-up fade-up-2
-              ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+              ${darkMode ? "text-stone-500" : "text-slate-400"}`}>
               Hi, I'm Daven —
             </p>
 
@@ -442,7 +506,7 @@ function Hero({ darkMode, socials }: HeroProps) {
             </h1>
 
             <p className={`text-base md:text-lg max-w-xl mb-8 leading-relaxed fade-up fade-up-3
-              ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+              ${darkMode ? "text-stone-400" : "text-slate-500"}`}>
               Laravel and PHP on the back, Vue and React on the front. I care about
               database design and architecture so the systems hold up when things get serious.
             </p>
@@ -454,7 +518,7 @@ function Hero({ darkMode, socials }: HeroProps) {
                 className={`group inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm
                   transition-all duration-200 hover:scale-[1.02]
                   ${darkMode
-                    ? "bg-white text-slate-900 hover:bg-gray-100"
+                    ? "bg-white text-slate-900 hover:bg-stone-100"
                     : "bg-slate-900 text-white hover:bg-slate-800"}`}
               >
                 See my work
@@ -465,7 +529,7 @@ function Hero({ darkMode, socials }: HeroProps) {
                 className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border
                   transition-all duration-200 hover:scale-[1.02]
                   ${darkMode
-                    ? "border-white/15 text-gray-200 hover:bg-white/5"
+                    ? "border-white/15 text-stone-200 hover:bg-white/5"
                     : "border-slate-300 text-slate-700 hover:bg-white"}`}
               >
                 Get in touch
@@ -475,7 +539,7 @@ function Hero({ darkMode, socials }: HeroProps) {
             {/* socials */}
             <div className="flex items-center gap-3 fade-up fade-up-5">
               <span className={`mono text-[10px] uppercase tracking-widest
-                ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+                ${darkMode ? "text-stone-600" : "text-slate-400"}`}>
                 find me
               </span>
               <span className={`h-px w-8 ${darkMode ? "bg-white/10" : "bg-slate-300"}`} />
@@ -530,7 +594,7 @@ function Hero({ darkMode, socials }: HeroProps) {
                   </span>
                   <span className={`mono text-[10px] px-2.5 py-1 rounded-md backdrop-blur-md
                     ${darkMode
-                      ? "bg-black/40 text-gray-300 border border-white/15"
+                      ? "bg-black/40 text-stone-300 border border-white/15"
                       : "bg-white/70 text-slate-600 border border-white/60"}`}>
                     v.{new Date().getFullYear()}
                   </span>
@@ -555,7 +619,7 @@ function Hero({ darkMode, socials }: HeroProps) {
                       {s.value}
                     </div>
                     <div className={`mono text-[9px] uppercase tracking-wider mt-0.5
-                      ${darkMode ? "text-gray-500" : "text-slate-400"}`}>
+                      ${darkMode ? "text-stone-500" : "text-slate-400"}`}>
                       {s.label}
                     </div>
                   </div>
@@ -568,7 +632,7 @@ function Hero({ darkMode, socials }: HeroProps) {
         {/* scroll cue */}
         <div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 fade-up fade-up-5">
           <span className={`mono text-[10px] uppercase tracking-widest
-            ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+            ${darkMode ? "text-stone-600" : "text-slate-400"}`}>
             scroll
           </span>
           <div className={`w-px h-10 bg-gradient-to-b
@@ -582,25 +646,31 @@ function Hero({ darkMode, socials }: HeroProps) {
 /* ═══════════════════════════════════════════════════════════════════════════
    Splash screen — shows once on first paint, fades itself out via CSS.
 ═══════════════════════════════════════════════════════════════════════════ */
-function Splash({ darkMode }: { darkMode: boolean }) {
-  const [mounted, setMounted] = useState(true);
+function Splash() {
+  /* show once per browser session — toggling theme later cannot bring it back */
+  const [mounted, setMounted] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !sessionStorage.getItem("splash-seen");
+  });
+
   useEffect(() => {
-    const t = setTimeout(() => setMounted(false), 2200);
+    if (!mounted) return;
+    const t = setTimeout(() => {
+      sessionStorage.setItem("splash-seen", "1");
+      setMounted(false);
+    }, 2200);
     return () => clearTimeout(t);
-  }, []);
+  }, [mounted]);
+
   if (!mounted) return null;
-  return (
-    <div
-      className={`splash ${darkMode ? "bg-black" : "bg-slate-50"}`}
-      aria-hidden="true"
-    >
+  return createPortal(
+    <div className="splash bg-stone-950" aria-hidden="true">
       <div className="relative">
-        <span className="splash-mark">daven.</span>
-        <span
-          className={`splash-rule ${darkMode ? "text-orange-400" : "text-orange-500"}`}
-        />
+        <span className="splash-mark">garlicbread.</span>
+        <span className="splash-rule text-orange-400" />
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -712,9 +782,9 @@ export default function App() {
 
   return (
     <div className={`min-h-screen relative noise-bg transition-colors duration-500
-      ${darkMode ? "bg-gray-950 text-gray-100" : "bg-slate-50 text-gray-900"}`}>
+      ${darkMode ? "bg-stone-950 text-stone-100" : "bg-slate-50 text-gray-900"}`}>
 
-      <Splash darkMode={darkMode} />
+      <Splash />
 
       <Navbar
         darkMode={darkMode}
@@ -747,7 +817,7 @@ export default function App() {
               Let's build <span className="serif font-normal opacity-90">something.</span>
             </h2>
             <p className={`mt-4 text-base md:text-lg max-w-md mx-auto
-              ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+              ${darkMode ? "text-stone-400" : "text-slate-500"}`}>
               Open to freelance, part-time, and side projects worth losing sleep over.
             </p>
 
@@ -761,7 +831,7 @@ export default function App() {
                   className={`mono text-xs uppercase tracking-widest px-4 py-2.5 rounded-xl border
                     transition-all duration-200 hover:scale-105 flex items-center gap-2
                     ${darkMode
-                      ? "bg-white/5 border-white/10 text-gray-200 hover:bg-white/10 hover:border-orange-400/40"
+                      ? "bg-white/5 border-white/10 text-stone-200 hover:bg-white/10 hover:border-orange-400/40"
                       : "bg-white border-slate-200 text-slate-700 hover:bg-orange-50 hover:border-orange-300"}`}
                 >
                   {s.isImg && s.icon
@@ -776,7 +846,7 @@ export default function App() {
           <div className={`pt-8 flex flex-col sm:flex-row items-center justify-between gap-3
             border-t ${darkMode ? "border-white/6" : "border-slate-200"}`}>
             <span className={`mono text-[10px] uppercase tracking-widest
-              ${darkMode ? "text-gray-600" : "text-slate-400"}`}>
+              ${darkMode ? "text-stone-600" : "text-slate-400"}`}>
               © {new Date().getFullYear()} Daven Alajid. All Rights Reserved.
             </span>
           </div>

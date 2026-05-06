@@ -125,7 +125,7 @@ export default function ProjectsSection({ darkMode }: ProjectsSectionProps) {
                         </h2>
                     </div>
                     <p className={`max-w-md text-sm md:text-base
-                        ${darkMode ? "text-gray-400" : "text-slate-500"}`}>
+                        ${darkMode ? "text-stone-400" : "text-slate-500"}`}>
                         A handful of projects spanning fullstack web, dashboards, and tools — click any card for details.
                     </p>
                 </div>

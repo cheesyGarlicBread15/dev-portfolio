@@ -20,7 +20,7 @@ export default function TechBadge({
             <div
                 className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-xs
           ${darkMode
-                        ? "bg-white/5 border border-white/8 text-gray-300"
+                        ? "bg-white/5 border border-white/8 text-stone-300"
                         : "bg-slate-100 border border-slate-200 text-slate-600"
                     }`}
             >
@@ -34,7 +34,7 @@ export default function TechBadge({
         <div
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium
         ${darkMode
-                    ? "bg-white/5 border border-white/10 text-gray-200"
+                    ? "bg-white/5 border border-white/10 text-stone-200"
                     : "bg-slate-100 border border-slate-200 text-slate-700"
                 }`}
         >
