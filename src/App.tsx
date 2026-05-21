@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { ArrowDown, Terminal, Menu, X } from "lucide-react";
+import { ArrowDown, Terminal, Menu, X, FileText } from "lucide-react";
 
 import DeveloperProfile from "@/assets/profiles/profile-barong.jpg";
 
@@ -528,6 +528,19 @@ function Hero({ darkMode, socials }: HeroProps) {
                     : "border-slate-300 text-slate-700 hover:bg-white"}`}
               >
                 Get in touch
+              </a>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border
+                  transition-all duration-200 hover:scale-[1.02]
+                  ${darkMode
+                    ? "border-orange-400/40 text-orange-300 hover:bg-orange-500/10"
+                    : "border-orange-300 text-orange-600 hover:bg-orange-50"}`}
+              >
+                <FileText className="w-4 h-4" />
+                Resume
               </a>
             </div>
 
