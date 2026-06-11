@@ -107,4 +107,14 @@ export const buildProjects = (
       links: [{ type: "Website", url: "https://prdpmin.online" }],
       featured: false,
     },
+    {
+      name: "HRIS, Document Tracking, and Inventory Management System",
+      description:
+        "The HRIS, Document Tracking, and Inventory Management System is designed to digitalize and centralize the business processes of government offices. From attendance and employee management to payroll and document management. The system is dynamic so that any public office can easily customize the system to fit their needs.",
+      image: getMainImage("project9"),
+      tech: ["Laravel", "React.js", "Shadcn/ui", "MySQL", "Figma"],
+      screenshots: screenshotsByProject["project9"] ?? [],
+      links: [{ type: "Website", url: "https://hris.obxsolution.com" }],
+      featured: false,
+    },
   ];
