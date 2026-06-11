@@ -437,8 +437,8 @@ interface HeroProps {
 }
 
 const HERO_STATS = [
-  { value: "3+", label: "Years coding" },
-  { value: "10+", label: "Projects completed" },
+  { value: "9+", label: "Years coding" },
+  { value: "10+", label: "Projects deployed" },
   { value: "∞", label: "Food consumed" },
 ];
 
