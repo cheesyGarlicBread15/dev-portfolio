@@ -437,7 +437,7 @@ interface HeroProps {
 }
 
 const HERO_STATS = [
-  { value: "9+", label: "Years coding" },
+  { value: "5+", label: "Years coding" },
   { value: "10+", label: "Projects deployed" },
   { value: "∞", label: "Food consumed" },
 ];
@@ -490,7 +490,7 @@ function Hero({ darkMode, socials }: HeroProps) {
 
             <p className={`text-base md:text-lg max-w-xl mb-6 leading-relaxed fade-up fade-up-3
               ${darkMode ? "text-stone-400" : "text-slate-500"}`}>
-              Laravel and PHP on the back, Vue and React on the front. I build systems that solve company and business processes.
+              Laravel and PHP on the back, Vue/React and Flutter on the front. I build systems that solve company and business processes.
             </p>
 
             {/* motto */}
